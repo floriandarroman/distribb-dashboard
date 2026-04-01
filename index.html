@@ -308,50 +308,10 @@ textarea { resize: vertical; min-height: 80px; }
 /* Forecasting */
 .forecast-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px;
+  border-radius: var(--radius); padding: 20px;
   transition: all var(--transition);
 }
 .forecast-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
-.forecast-icon {
-  width: 36px; height: 36px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; margin-bottom: 12px;
-}
-.forecast-content { }
-.forecast-title {
-  font-size: 12px; font-weight: 600; color: var(--text-secondary);
-  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
-}
-.forecast-value {
-  font-size: 20px; font-weight: 700; color: var(--text-primary);
-  margin-bottom: 2px;
-}
-.forecast-range {
-  font-size: 12px; color: var(--text-muted); margin-bottom: 6px;
-}
-.forecast-detail {
-  font-size: 11px; color: var(--text-muted); line-height: 1.4;
-}
-
-/* Ranking Predictions */
-.ranking-predictions { }
-.prediction-item {
-  padding: 12px 0; border-bottom: 1px solid var(--border);
-  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px;
-  align-items: center;
-}
-.prediction-item:last-child { border-bottom: none; }
-.prediction-kw {
-  font-size: 13px; font-weight: 500; color: var(--text-primary);
-}
-.prediction-meta {
-  font-size: 11px; color: var(--text-muted);
-  display: flex; gap: 8px; align-items: center;
-}
-.prediction-timeline {
-  font-size: 12px; color: var(--text-secondary); font-weight: 500;
-  text-align: right;
-}
 
 /* Activity feed */
 .activity-item {
@@ -859,86 +819,147 @@ textarea { resize: vertical; min-height: 80px; }
         </div>
       </div>
 
-      <!-- Forecasting -->
+      <!-- SEO Forecasting -->
       <div class="card" style="margin-bottom:24px">
         <div class="card-header">
-          <h3>🔮 Growth Projections</h3>
-          <div style="display:flex;gap:8px;align-items:center">
-            <select style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px">
-              <option>30 days</option>
-              <option>90 days</option>
-              <option>1 year</option>
-            </select>
-            <span style="font-size:11px;color:var(--text-muted)">Based on current DR, KW volume & difficulty</span>
-          </div>
+          <h3>SEO Forecast</h3>
+          <select id="forecastRange" onchange="updateForecast()" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;font-weight:500;color:var(--text-primary);cursor:pointer">
+            <option value="30">Next 30 days</option>
+            <option value="90" selected>Next 90 days</option>
+            <option value="365">Next 12 months</option>
+          </select>
         </div>
         <div class="card-body">
-          <div class="grid-3">
-            <!-- Traffic Forecast -->
+          <!-- 3 forecast metrics -->
+          <div class="grid-3" id="forecastMetrics">
             <div class="forecast-card">
-              <div class="forecast-icon" style="background:var(--blue-light)">📈</div>
-              <div class="forecast-content">
-                <div class="forecast-title">Traffic Growth</div>
-                <div class="forecast-value">+4,200 visits</div>
-                <div class="forecast-range">2,800–4,200 monthly</div>
-                <div class="forecast-detail">67K KW volume × DR 29 = 85% ranking probability</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+                <div style="font-size:12px;font-weight:500;color:var(--text-secondary)">Articles Published</div>
+                <span style="font-size:11px;color:var(--text-muted);background:var(--gray-light);padding:2px 6px;border-radius:4px" id="fc-articles-pace">~10/mo</span>
+              </div>
+              <div style="font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px" id="fc-articles-value">30</div>
+              <div style="font-size:12px;color:var(--text-muted)" id="fc-articles-sub">270 current + 30 new = 300 total indexed</div>
+              <!-- mini progress bar -->
+              <div style="margin-top:12px;background:var(--gray-light);border-radius:4px;height:6px;overflow:hidden">
+                <div id="fc-articles-bar" style="height:100%;background:var(--accent);border-radius:4px;width:75%;transition:width 0.4s ease"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px">
+                <span style="font-size:10px;color:var(--text-muted)">270 now</span>
+                <span style="font-size:10px;color:var(--text-muted)" id="fc-articles-target">Target: 400</span>
               </div>
             </div>
-            
-            <!-- Revenue Forecast -->
+
             <div class="forecast-card">
-              <div class="forecast-icon" style="background:var(--green-light)">💰</div>
-              <div class="forecast-content">
-                <div class="forecast-title">Revenue Impact</div>
-                <div class="forecast-value">+$5,100 MRR</div>
-                <div class="forecast-range">$3,400–$5,100</div>
-                <div class="forecast-detail">4,200 visits × 2.3% trial conversion × $97 avg</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+                <div style="font-size:12px;font-weight:500;color:var(--text-secondary)">AI SEO Visibility Score</div>
+                <span style="font-size:11px;padding:2px 6px;border-radius:4px;font-weight:500" id="fc-visibility-badge" style="background:var(--yellow-light);color:var(--yellow)">Moderate</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+                <div style="font-size:28px;font-weight:700;letter-spacing:-0.5px" id="fc-visibility-value">42</div>
+                <span style="font-size:13px;color:var(--text-muted)">/100</span>
+                <span style="font-size:12px;color:var(--green);font-weight:500" id="fc-visibility-delta">+16</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-muted)" id="fc-visibility-sub">Keyword coverage, topical authority, AI overview citations</div>
+              <!-- score gauge -->
+              <div style="margin-top:12px;background:var(--gray-light);border-radius:4px;height:6px;overflow:hidden">
+                <div id="fc-visibility-bar" style="height:100%;border-radius:4px;width:42%;transition:width 0.4s ease;background:linear-gradient(90deg, var(--yellow), var(--accent))"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px">
+                <span style="font-size:10px;color:var(--text-muted)">Score 26 now</span>
+                <span style="font-size:10px;color:var(--text-muted)">Goal: 70+</span>
               </div>
             </div>
-            
-            <!-- Domain Authority -->
+
             <div class="forecast-card">
-              <div class="forecast-icon" style="background:var(--purple-light)">⚡</div>
-              <div class="forecast-content">
-                <div class="forecast-title">Domain Rating</div>
-                <div class="forecast-value">DR 32–35</div>
-                <div class="forecast-range">Current: 29</div>
-                <div class="forecast-detail">18 backlinks/month pace = +3-6 DR points</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+                <div style="font-size:12px;font-weight:500;color:var(--text-secondary)">Traffic Potential</div>
+                <span style="font-size:11px;color:var(--text-muted);background:var(--gray-light);padding:2px 6px;border-radius:4px" id="fc-traffic-pace">monthly</span>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+                <div style="font-size:28px;font-weight:700;letter-spacing:-0.5px" id="fc-traffic-value">2,400</div>
+                <span style="font-size:12px;color:var(--green);font-weight:500" id="fc-traffic-delta">+530%</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-muted)" id="fc-traffic-sub">Based on 67K total KW volume, DR 29, avg KD 22</div>
+              <!-- traffic bar -->
+              <div style="margin-top:12px;background:var(--gray-light);border-radius:4px;height:6px;overflow:hidden">
+                <div id="fc-traffic-bar" style="height:100%;background:var(--blue);border-radius:4px;width:24%;transition:width 0.4s ease"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px">
+                <span style="font-size:10px;color:var(--text-muted)">381 clicks now</span>
+                <span style="font-size:10px;color:var(--text-muted)" id="fc-traffic-target">Potential: 10K/mo</span>
               </div>
             </div>
           </div>
-          
-          <!-- Key Ranking Predictions -->
-          <div style="margin-top:20px">
-            <h4 style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text-secondary)">🎯 Next Articles to Rank</h4>
-            <div class="ranking-predictions">
-              <div class="prediction-item">
-                <div class="prediction-kw">"AI SEO software"</div>
-                <div class="prediction-meta">
-                  <span>8.1K vol</span>
-                  <span>KD 15</span>
-                  <span style="color:var(--green);font-weight:600">85% chance</span>
-                </div>
-                <div class="prediction-timeline">Page 1 in 45 days</div>
-              </div>
-              <div class="prediction-item">
-                <div class="prediction-kw">"Best SEO automation tools"</div>
-                <div class="prediction-meta">
-                  <span>6.6K vol</span>
-                  <span>KD 18</span>
-                  <span style="color:var(--green);font-weight:600">78% chance</span>
-                </div>
-                <div class="prediction-timeline">Page 1 in 52 days</div>
-              </div>
-              <div class="prediction-item">
-                <div class="prediction-kw">"Distribb alternative"</div>
-                <div class="prediction-meta">
-                  <span>1.9K vol</span>
-                  <span>KD 12</span>
-                  <span style="color:var(--green);font-weight:600">92% chance</span>
-                </div>
-                <div class="prediction-timeline">Page 1 in 28 days</div>
-              </div>
+
+          <!-- Keyword ranking forecast table -->
+          <div style="margin-top:24px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <div style="font-size:13px;font-weight:600;color:var(--text-secondary)">Keyword Ranking Forecast</div>
+              <span style="font-size:11px;color:var(--text-muted)" id="fc-kw-count">12 keywords tracked</span>
+            </div>
+            <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;font-size:12px">
+                <thead>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <th style="text-align:left;padding:8px 12px;font-weight:500;color:var(--text-muted);font-size:11px">KEYWORD</th>
+                    <th style="text-align:right;padding:8px 12px;font-weight:500;color:var(--text-muted);font-size:11px">VOLUME</th>
+                    <th style="text-align:right;padding:8px 12px;font-weight:500;color:var(--text-muted);font-size:11px">KD</th>
+                    <th style="text-align:left;padding:8px 12px;font-weight:500;color:var(--text-muted);font-size:11px">CURRENT</th>
+                    <th style="text-align:left;padding:8px 12px;font-weight:500;color:var(--text-muted);font-size:11px">PROJECTED</th>
+                    <th style="text-align:right;padding:8px 12px;font-weight:500;color:var(--text-muted);font-size:11px">TRAFFIC EST.</th>
+                  </tr>
+                </thead>
+                <tbody id="forecastTable">
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <td style="padding:10px 12px;font-weight:500">ai seo software</td>
+                    <td style="padding:10px 12px;text-align:right;color:var(--text-secondary)">8,100</td>
+                    <td style="padding:10px 12px;text-align:right"><span style="background:var(--green-light);color:var(--green);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">15</span></td>
+                    <td style="padding:10px 12px"><span style="color:var(--text-muted)">Not ranked</span></td>
+                    <td style="padding:10px 12px"><span style="background:var(--green-light);color:var(--green);padding:2px 8px;border-radius:4px;font-weight:500">Page 1</span></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:500">+486/mo</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <td style="padding:10px 12px;font-weight:500">seo automation tools</td>
+                    <td style="padding:10px 12px;text-align:right;color:var(--text-secondary)">6,600</td>
+                    <td style="padding:10px 12px;text-align:right"><span style="background:var(--green-light);color:var(--green);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">18</span></td>
+                    <td style="padding:10px 12px"><span style="color:var(--text-muted)">Pos. 38</span></td>
+                    <td style="padding:10px 12px"><span style="background:var(--green-light);color:var(--green);padding:2px 8px;border-radius:4px;font-weight:500">Page 1</span></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:500">+396/mo</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <td style="padding:10px 12px;font-weight:500">automatic backlinks</td>
+                    <td style="padding:10px 12px;text-align:right;color:var(--text-secondary)">4,400</td>
+                    <td style="padding:10px 12px;text-align:right"><span style="background:var(--green-light);color:var(--green);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">12</span></td>
+                    <td style="padding:10px 12px"><span style="color:var(--text-muted)">Pos. 22</span></td>
+                    <td style="padding:10px 12px"><span style="background:var(--blue-light);color:var(--blue);padding:2px 8px;border-radius:4px;font-weight:500">Top 5</span></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:500">+352/mo</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <td style="padding:10px 12px;font-weight:500">ai content writer for seo</td>
+                    <td style="padding:10px 12px;text-align:right;color:var(--text-secondary)">3,600</td>
+                    <td style="padding:10px 12px;text-align:right"><span style="background:var(--yellow-light);color:var(--yellow);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">25</span></td>
+                    <td style="padding:10px 12px"><span style="color:var(--text-muted)">Pos. 44</span></td>
+                    <td style="padding:10px 12px"><span style="background:var(--blue-light);color:var(--blue);padding:2px 8px;border-radius:4px;font-weight:500">Top 10</span></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:500">+180/mo</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <td style="padding:10px 12px;font-weight:500">white label seo software</td>
+                    <td style="padding:10px 12px;text-align:right;color:var(--text-secondary)">1,600</td>
+                    <td style="padding:10px 12px;text-align:right"><span style="background:var(--green-light);color:var(--green);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">0</span></td>
+                    <td style="padding:10px 12px"><span style="color:var(--text-muted)">Not ranked</span></td>
+                    <td style="padding:10px 12px"><span style="background:var(--green-light);color:var(--green);padding:2px 8px;border-radius:4px;font-weight:500">Page 1</span></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:500">+224/mo</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:10px 12px;font-weight:500">semrush alternative</td>
+                    <td style="padding:10px 12px;text-align:right;color:var(--text-secondary)">2,900</td>
+                    <td style="padding:10px 12px;text-align:right"><span style="background:var(--yellow-light);color:var(--yellow);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">32</span></td>
+                    <td style="padding:10px 12px"><span style="color:var(--text-muted)">Not ranked</span></td>
+                    <td style="padding:10px 12px"><span style="background:var(--yellow-light);color:var(--yellow);padding:2px 8px;border-radius:4px;font-weight:500">Page 2</span></td>
+                    <td style="padding:10px 12px;text-align:right;font-weight:500">+87/mo</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -2918,6 +2939,34 @@ openclawlab.xyz/openclaw-vs-lindy-ai</div>
 
 <script>
 // Navigation
+function updateForecast() {
+  const range = document.getElementById('forecastRange').value;
+  const data = {
+    30: { articles: 10, articlesTotal: 280, articlesPace: '~10/mo', articlesSub: '270 current + 10 new = 280 total indexed', articlesBar: 70, articlesTarget: 'Target: 400', visibility: 34, visFrom: 26, visDelta: '+8', visBadge: 'Low', visBadgeColor: 'var(--yellow)', visBadgeBg: 'var(--yellow-light)', visBar: 34, visSub: 'Keyword coverage expanding, topical clusters forming', traffic: '680', trafficDelta: '+78%', trafficSub: 'Based on 67K total KW volume, DR 29, avg KD 22', trafficBar: 7, kwCount: '12 keywords tracked' },
+    90: { articles: 30, articlesTotal: 300, articlesPace: '~10/mo', articlesSub: '270 current + 30 new = 300 total indexed', articlesBar: 75, articlesTarget: 'Target: 400', visibility: 42, visFrom: 26, visDelta: '+16', visBadge: 'Moderate', visBadgeColor: 'var(--yellow)', visBadgeBg: 'var(--yellow-light)', visBar: 42, visSub: 'Keyword coverage, topical authority, AI overview citations', traffic: '2,400', trafficDelta: '+530%', trafficSub: 'Based on 67K total KW volume, DR 29, avg KD 22', trafficBar: 24, kwCount: '12 keywords tracked' },
+    365: { articles: 120, articlesTotal: 390, articlesPace: '~10/mo', articlesSub: '270 current + 120 new = 390 total indexed', articlesBar: 97, articlesTarget: 'Target: 400', visibility: 68, visFrom: 26, visDelta: '+42', visBadge: 'Strong', visBadgeColor: 'var(--green)', visBadgeBg: 'var(--green-light)', visBar: 68, visSub: 'Full topical authority, multiple AI overview citations, DR 40+', traffic: '8,200', trafficDelta: '+2,052%', trafficSub: 'Based on 67K total KW volume, projected DR 40, avg KD 22', trafficBar: 82, kwCount: '12 keywords tracked' }
+  };
+  const d = data[range];
+  document.getElementById('fc-articles-value').textContent = d.articles;
+  document.getElementById('fc-articles-pace').textContent = d.articlesPace;
+  document.getElementById('fc-articles-sub').textContent = d.articlesSub;
+  document.getElementById('fc-articles-bar').style.width = d.articlesBar + '%';
+  document.getElementById('fc-articles-target').textContent = d.articlesTarget;
+  document.getElementById('fc-visibility-value').textContent = d.visibility;
+  document.getElementById('fc-visibility-delta').textContent = d.visDelta;
+  const badge = document.getElementById('fc-visibility-badge');
+  badge.textContent = d.visBadge;
+  badge.style.background = d.visBadgeBg;
+  badge.style.color = d.visBadgeColor;
+  document.getElementById('fc-visibility-sub').textContent = d.visSub;
+  document.getElementById('fc-visibility-bar').style.width = d.visBar + '%';
+  document.getElementById('fc-traffic-value').textContent = d.traffic;
+  document.getElementById('fc-traffic-delta').textContent = d.trafficDelta;
+  document.getElementById('fc-traffic-sub').textContent = d.trafficSub;
+  document.getElementById('fc-traffic-bar').style.width = d.trafficBar + '%';
+  document.getElementById('fc-kw-count').textContent = d.kwCount;
+}
+
 function navigate(page) {
   // Update active nav item
   document.querySelectorAll('.nav-item').forEach(item => {
