@@ -1,0 +1,2917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distribb — Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --accent: #FF6B2C;
+  --accent-light: #FFF0E9;
+  --accent-hover: #E85A1E;
+  --bg: #F8F9FB;
+  --surface: #FFFFFF;
+  --border: #E8EBF0;
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --sidebar-bg: #FAFBFC;
+  --sidebar-width: 260px;
+  --green: #10B981;
+  --green-light: #ECFDF5;
+  --blue: #3B82F6;
+  --blue-light: #EFF6FF;
+  --yellow: #F59E0B;
+  --yellow-light: #FFFBEB;
+  --red: #EF4444;
+  --red-light: #FEF2F2;
+  --purple: #8B5CF6;
+  --purple-light: #F5F3FF;
+  --gray: #9CA3AF;
+  --gray-light: #F3F4F6;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  --transition: 150ms ease;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  transition: transform 0.25s ease;
+}
+
+.sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+.logo { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px; }
+.logo span { color: var(--accent); }
+
+.project-selector {
+  margin-top: 12px; padding: 8px 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; transition: border-color var(--transition);
+}
+.project-selector:hover { border-color: var(--accent); }
+.project-icon {
+  width: 28px; height: 28px; background: var(--accent-light);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--accent);
+}
+.project-info { flex: 1; min-width: 0; }
+.project-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.project-domain { font-size: 11px; color: var(--text-muted); }
+.project-selector svg { color: var(--text-muted); flex-shrink: 0; }
+
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+.nav-group { padding: 0 12px; margin-bottom: 4px; }
+.nav-group-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 8px 4px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  color: var(--text-secondary); cursor: pointer;
+  transition: all var(--transition);
+  font-size: 13px; font-weight: 450; text-decoration: none;
+}
+.nav-item:hover { background: rgba(0,0,0,0.03); color: var(--text-primary); }
+.nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 500; }
+.nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto; font-size: 11px; font-weight: 600;
+  padding: 1px 6px; border-radius: 10px;
+  background: var(--accent); color: #fff;
+}
+
+.sidebar-footer {
+  padding: 16px; border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #FF9A5C);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: #fff;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 13px; font-weight: 500; }
+.user-plan { font-size: 11px; color: var(--text-muted); }
+
+/* Mobile hamburger */
+.hamburger {
+  display: none; position: fixed; top: 16px; left: 16px;
+  z-index: 200; width: 40px; height: 40px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  align-items: center; justify-content: center;
+  box-shadow: var(--shadow);
+}
+.hamburger svg { width: 20px; height: 20px; color: var(--text-primary); }
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.3); z-index: 99;
+}
+
+/* Main content */
+.main { margin-left: var(--sidebar-width); flex: 1; min-height: 100vh; }
+.page-header {
+  padding: 24px 32px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky; top: 0; z-index: 50;
+}
+.page-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+.page-header p { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+.page-header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+.page-content { padding: 24px 32px 40px; }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.2s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  border: 1px solid transparent; transition: all var(--transition);
+  text-decoration: none; white-space: nowrap;
+  font-family: inherit;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--surface); color: var(--text-primary); border-color: var(--border); }
+.btn-secondary:hover { background: var(--gray-light); }
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-ghost:hover { background: var(--gray-light); color: var(--text-primary); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-icon { padding: 6px; border-radius: var(--radius-sm); }
+.btn-icon svg { width: 16px; height: 16px; }
+
+/* Cards */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+.card:hover { box-shadow: var(--shadow); }
+.card-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-header h3 { font-size: 14px; font-weight: 600; }
+.card-body { padding: 20px; }
+
+/* Metric cards */
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.metric-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  box-shadow: var(--shadow-sm); transition: all var(--transition);
+}
+.metric-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.metric-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; margin-bottom: 12px;
+}
+.metric-value { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+.metric-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; font-weight: 500; }
+.metric-change { font-size: 11px; font-weight: 600; margin-top: 8px; display: flex; align-items: center; gap: 3px; }
+.metric-change.up { color: var(--green); }
+.metric-change.down { color: var(--red); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  padding: 10px 16px; text-align: left;
+  border-bottom: 1px solid var(--border); background: var(--bg);
+}
+td {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  font-size: 13px; vertical-align: middle;
+}
+tr:hover td { background: rgba(0,0,0,0.01); }
+tr:last-child td { border-bottom: none; }
+
+/* Badges */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 6px;
+  font-size: 11px; font-weight: 600;
+}
+.badge-green { background: var(--green-light); color: var(--green); }
+.badge-yellow { background: var(--yellow-light); color: var(--yellow); }
+.badge-blue { background: var(--blue-light); color: var(--blue); }
+.badge-red { background: var(--red-light); color: var(--red); }
+.badge-purple { background: var(--purple-light); color: var(--purple); }
+.badge-gray { background: var(--gray-light); color: var(--text-secondary); }
+
+/* Form elements */
+.input, select, textarea {
+  width: 100%; padding: 9px 12px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 13px; font-family: inherit;
+  background: var(--surface); color: var(--text-primary);
+  transition: border-color var(--transition);
+  outline: none;
+}
+.input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.input-group { margin-bottom: 16px; }
+.input-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+textarea { resize: vertical; min-height: 80px; }
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+}
+.tab {
+  padding: 10px 16px; font-size: 13px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all var(--transition);
+  background: none; border-top: none; border-left: none; border-right: none;
+  font-family: inherit;
+}
+.tab:hover { color: var(--text-primary); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Filters */
+.filters { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.filter-chip {
+  padding: 6px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-secondary); transition: all var(--transition);
+}
+.filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+.filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Grid layouts */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.gap-24 { gap: 24px; }
+
+/* Pipeline */
+.pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.pipeline-col h4 {
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+}
+.pipeline-col h4 .count {
+  background: var(--gray-light); padding: 1px 6px; border-radius: 10px;
+  font-size: 11px;
+}
+.pipeline-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px;
+  margin-bottom: 8px; cursor: pointer;
+  transition: all var(--transition);
+}
+.pipeline-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.pipeline-card-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+.pipeline-card-meta { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+
+/* Activity feed */
+.activity-item {
+  display: flex; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  margin-top: 6px; flex-shrink: 0;
+}
+.activity-content { flex: 1; }
+.activity-text { font-size: 13px; }
+.activity-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* Modal */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 500;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; animation: fadeIn 0.15s ease; }
+.modal {
+  background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); width: 100%; max-width: 560px;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-header {
+  padding: 20px 24px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-header h2 { font-size: 16px; font-weight: 600; }
+.modal-close {
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm); cursor: pointer; border: none; background: none;
+  color: var(--text-muted); transition: all var(--transition);
+}
+.modal-close:hover { background: var(--gray-light); color: var(--text-primary); }
+.modal-body { padding: 24px; }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+
+/* Onboarding */
+.onboarding {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.onboarding-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.onboarding-header h3 { font-size: 16px; font-weight: 600; }
+.onboarding-progress { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+.progress-bar { width: 100%; height: 6px; background: var(--gray-light); border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s ease; }
+.checklist { display: grid; gap: 8px; }
+.checklist-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: background var(--transition);
+}
+.checklist-item:hover { background: var(--gray-light); }
+.checklist-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border); display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+  transition: all var(--transition);
+}
+.checklist-item.done .checklist-check { background: var(--green); border-color: var(--green); }
+.checklist-item.done .checklist-check svg { display: block; }
+.checklist-check svg { display: none; width: 12px; height: 12px; color: #fff; }
+.checklist-text { font-size: 13px; font-weight: 450; }
+.checklist-item.done .checklist-text { color: var(--text-muted); text-decoration: line-through; }
+
+/* Quick actions */
+.quick-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.quick-action {
+  display: flex; align-items: center; gap: 10px; padding: 14px 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: all var(--transition); text-decoration: none; color: inherit;
+}
+.quick-action:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+.quick-action-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.quick-action-label { font-size: 12px; font-weight: 500; }
+
+/* Calendar */
+.calendar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.calendar-header {
+  padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.calendar-header h3 { font-size: 15px; font-weight: 600; }
+.calendar-nav { display: flex; gap: 4px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.calendar-day-header {
+  padding: 8px; text-align: center; font-size: 11px;
+  font-weight: 600; color: var(--text-muted); text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.calendar-day {
+  min-height: 80px; padding: 6px 8px;
+  border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  font-size: 12px; position: relative;
+}
+.calendar-day:nth-child(7n) { border-right: none; }
+.calendar-day.other-month { background: var(--bg); }
+.calendar-day .day-num { font-weight: 500; color: var(--text-secondary); margin-bottom: 4px; }
+.calendar-day.today .day-num {
+  background: var(--accent); color: #fff; width: 22px; height: 22px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.calendar-event {
+  font-size: 10px; padding: 2px 5px; border-radius: 3px;
+  margin-bottom: 2px; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; cursor: pointer; font-weight: 500;
+}
+.calendar-event.published { background: var(--green-light); color: var(--green); }
+.calendar-event.scheduled { background: var(--blue-light); color: var(--blue); }
+.calendar-event.draft { background: var(--yellow-light); color: var(--yellow); }
+
+/* Integration cards */
+.integration-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  box-shadow: var(--shadow-sm); transition: all var(--transition);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.integration-card:hover { box-shadow: var(--shadow-md); }
+.integration-header { display: flex; align-items: center; gap: 12px; }
+.integration-logo {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700;
+}
+.integration-info h4 { font-size: 14px; font-weight: 600; }
+.integration-info p { font-size: 12px; color: var(--text-muted); }
+.integration-footer { display: flex; align-items: center; justify-content: space-between; }
+.integration-status { font-size: 11px; display: flex; align-items: center; gap: 4px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-dot.connected { background: var(--green); }
+.status-dot.disconnected { background: var(--gray); }
+
+/* SVG Chart */
+.chart-container { position: relative; padding: 20px 0; }
+.chart-svg { width: 100%; height: 200px; }
+.chart-labels { display: flex; justify-content: space-between; padding: 0 10px; }
+.chart-label { font-size: 11px; color: var(--text-muted); }
+
+/* Keyword suggestions */
+.suggestion-tag {
+  display: inline-block; padding: 5px 10px; margin: 3px;
+  background: var(--gray-light); border-radius: 6px;
+  font-size: 12px; cursor: pointer; transition: all var(--transition);
+}
+.suggestion-tag:hover { background: var(--accent-light); color: var(--accent); }
+
+/* Credit display */
+.credit-display {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 24px; font-weight: 700;
+}
+.credit-label { font-size: 12px; color: var(--text-secondary); }
+
+/* Thread cards (Reddit) */
+.thread-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px;
+  margin-bottom: 12px; transition: all var(--transition);
+}
+.thread-card:hover { box-shadow: var(--shadow); }
+.thread-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--text-muted); margin-bottom: 8px;
+}
+.thread-title { font-size: 14px; font-weight: 500; margin-bottom: 8px; }
+.thread-suggestion {
+  background: var(--blue-light); border-radius: var(--radius-sm);
+  padding: 10px 12px; font-size: 12px; color: var(--blue);
+  margin-top: 10px; line-height: 1.5;
+}
+
+/* Social platform icons */
+.platform-icons { display: flex; gap: 6px; flex-wrap: wrap; }
+.platform-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); cursor: pointer;
+  font-size: 14px; transition: all var(--transition);
+  background: var(--surface);
+}
+.platform-icon:hover { border-color: var(--accent); }
+.platform-icon.active { border-color: var(--accent); background: var(--accent-light); }
+
+/* Post preview */
+.post-preview {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  min-height: 120px;
+}
+.post-preview-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.post-preview-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--gray-light); }
+.post-preview-name { font-size: 13px; font-weight: 600; }
+.post-preview-text { font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+
+/* Settings sections */
+.settings-section { margin-bottom: 32px; }
+.settings-section h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.settings-section > p { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-label { font-size: 13px; font-weight: 500; }
+.settings-value { font-size: 13px; color: var(--text-secondary); }
+
+/* Toggle */
+.toggle {
+  width: 40px; height: 22px; border-radius: 11px;
+  background: var(--gray-light); position: relative;
+  cursor: pointer; transition: background var(--transition);
+}
+.toggle.on { background: var(--accent); }
+.toggle::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; box-shadow: var(--shadow-sm);
+  transition: transform var(--transition);
+}
+.toggle.on::after { transform: translateX(18px); }
+
+/* Plan card */
+.plan-card {
+  background: linear-gradient(135deg, var(--accent) 0%, #FF9A5C 100%);
+  border-radius: var(--radius); padding: 24px;
+  color: #fff; margin-bottom: 20px;
+}
+.plan-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.plan-card p { font-size: 13px; opacity: 0.9; }
+.plan-usage { display: flex; gap: 24px; margin-top: 16px; }
+.plan-usage-item { font-size: 12px; }
+.plan-usage-item strong { display: block; font-size: 18px; margin-bottom: 2px; }
+
+/* Invoice table */
+.invoice-status { display: flex; align-items: center; gap: 4px; }
+
+/* Team member */
+.team-member {
+  display: flex; align-items: center; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.team-member:last-child { border-bottom: none; }
+.team-member .avatar { width: 36px; height: 36px; font-size: 14px; }
+.team-member-info { flex: 1; }
+.team-member-info .name { font-size: 13px; font-weight: 500; }
+.team-member-info .email { font-size: 12px; color: var(--text-muted); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .pipeline { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .hamburger { display: flex; }
+  .main { margin-left: 0; }
+  .page-header { padding: 16px 20px 14px; padding-left: 60px; }
+  .page-content { padding: 16px 20px 40px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .pipeline { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .calendar-day { min-height: 50px; }
+  .page-header-row { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .metrics-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray); }
+
+/* Search input */
+.search-input {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  transition: border-color var(--transition);
+}
+.search-input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.search-input svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; }
+.search-input input {
+  flex: 1; border: none; outline: none; font-size: 13px;
+  font-family: inherit; background: transparent; color: var(--text-primary);
+}
+
+/* Trend sparkline */
+.sparkline { display: inline-flex; align-items: flex-end; gap: 1px; height: 20px; }
+.sparkline-bar { width: 3px; border-radius: 1px; background: var(--accent); transition: height 0.2s; }
+
+/* Empty state */
+.empty-state {
+  text-align: center; padding: 48px 20px;
+}
+.empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+.empty-state h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.empty-state p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+
+/* Subreddit tag */
+.subreddit-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 4px; font-size: 11px;
+  font-weight: 600; background: #FF45001a; color: #FF4500;
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile hamburger -->
+<button class="hamburger" onclick="toggleSidebar()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+<div class="overlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">distribb<span>.</span></div>
+    <div class="project-selector" onclick="this.classList.toggle('open')">
+      <div class="project-icon">OC</div>
+      <div class="project-info">
+        <div class="project-name">OpenClaw Lab</div>
+        <div class="project-domain">openclawlab.xyz</div>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-group">
+      <a class="nav-item active" href="#dashboard" onclick="navigate('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="#content" onclick="navigate('content')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Content Planner
+        <span class="nav-badge">12</span>
+      </a>
+      <a class="nav-item" href="#keywords" onclick="navigate('keywords')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        Keyword Research
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Distribution</div>
+      <a class="nav-item" href="#backlinks" onclick="navigate('backlinks')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        Backlinks Exchange
+        <span class="nav-badge">3</span>
+      </a>
+      <a class="nav-item" href="#reddit" onclick="navigate('reddit')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>
+        Reddit Radar
+        <span class="nav-badge">8</span>
+      </a>
+      <a class="nav-item" href="#social" onclick="navigate('social')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Social Media
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Settings</div>
+      <a class="nav-item" href="#integrations" onclick="navigate('integrations')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="8" height="8" rx="2"/><rect x="14" y="2" width="8" height="8" rx="2"/><rect x="2" y="14" width="8" height="8" rx="2"/><path d="M18 14v4h-4"/><path d="M14 18h4v-4"/></svg>
+        Integrations
+      </a>
+      <a class="nav-item" href="#analytics" onclick="navigate('analytics')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </a>
+      <a class="nav-item" href="#settings" onclick="navigate('settings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="avatar">FD</div>
+    <div class="user-info">
+      <div class="user-name">Florian D.</div>
+      <div class="user-plan">Growth Plan</div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div class="main">
+
+  <!-- ==================== DASHBOARD ==================== -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Welcome back, Florian. Here is your content overview.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary btn-sm">Last 30 days</button>
+          <button class="btn btn-primary btn-sm" onclick="showModal('create-article-modal')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Article
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- Onboarding -->
+      <div class="onboarding" id="onboarding">
+        <div class="onboarding-header">
+          <h3>🚀 Get started with Distribb</h3>
+          <span class="onboarding-progress">3 of 5 complete</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+        <div class="checklist">
+          <div class="checklist-item done">
+            <div class="checklist-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="checklist-text">Connect your website (WordPress)</span>
+          </div>
+          <div class="checklist-item done">
+            <div class="checklist-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="checklist-text">Set your brand voice and target audience</span>
+          </div>
+          <div class="checklist-item done">
+            <div class="checklist-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="checklist-text">Publish your first AI article</span>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="checklist-text">Join a backlink exchange</span>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="checklist-text">Repurpose an article to social media</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--accent-light)">📝</div>
+          <div class="metric-value">47</div>
+          <div class="metric-label">Articles Published</div>
+          <div class="metric-change up">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +12 this month
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--blue-light)">🔗</div>
+          <div class="metric-value">128</div>
+          <div class="metric-label">Backlinks Earned</div>
+          <div class="metric-change up">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +23 this month
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:#FF45001a">💬</div>
+          <div class="metric-value">34</div>
+          <div class="metric-label">Reddit Mentions</div>
+          <div class="metric-change up">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +8 this week
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--purple-light)">📱</div>
+          <div class="metric-value">89</div>
+          <div class="metric-label">Social Posts</div>
+          <div class="metric-change up">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +15 this month
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--green-light)">📊</div>
+          <div class="metric-value">72</div>
+          <div class="metric-label">SEO Score</div>
+          <div class="metric-change up">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+            +5 pts from last month
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header">
+          <h3>Content Pipeline</h3>
+          <button class="btn btn-ghost btn-sm" onclick="navigate('content')">View all</button>
+        </div>
+        <div class="card-body">
+          <div class="pipeline">
+            <div class="pipeline-col">
+              <h4>🔍 Researching <span class="count">3</span></h4>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">Best AI Writing Tools 2026</div>
+                <div class="pipeline-card-meta">
+                  <span>KD: 34</span>
+                  <span>Vol: 8.1K</span>
+                </div>
+              </div>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">How to Automate SEO Content</div>
+                <div class="pipeline-card-meta">
+                  <span>KD: 28</span>
+                  <span>Vol: 4.2K</span>
+                </div>
+              </div>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">SaaS Content Marketing Guide</div>
+                <div class="pipeline-card-meta">
+                  <span>KD: 42</span>
+                  <span>Vol: 6.5K</span>
+                </div>
+              </div>
+            </div>
+            <div class="pipeline-col">
+              <h4>✍️ Writing <span class="count">2</span></h4>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">Programmatic SEO for Startups</div>
+                <div class="pipeline-card-meta">
+                  <span>2,400 words</span>
+                  <span>67%</span>
+                </div>
+              </div>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">Link Building Strategies That Work</div>
+                <div class="pipeline-card-meta">
+                  <span>1,800 words</span>
+                  <span>43%</span>
+                </div>
+              </div>
+            </div>
+            <div class="pipeline-col">
+              <h4>👀 Review <span class="count">2</span></h4>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">AI Agent for Customer Support</div>
+                <div class="pipeline-card-meta">
+                  <span>3,200 words</span>
+                  <span>SEO: 84</span>
+                </div>
+              </div>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">Reddit Marketing for SaaS</div>
+                <div class="pipeline-card-meta">
+                  <span>2,100 words</span>
+                  <span>SEO: 78</span>
+                </div>
+              </div>
+            </div>
+            <div class="pipeline-col">
+              <h4>✅ Published <span class="count">5</span></h4>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">OpenClaw vs Lindy AI</div>
+                <div class="pipeline-card-meta">
+                  <span>Mar 28</span>
+                  <span>SEO: 91</span>
+                </div>
+              </div>
+              <div class="pipeline-card">
+                <div class="pipeline-card-title">Top 10 SEO Tools for Founders</div>
+                <div class="pipeline-card-meta">
+                  <span>Mar 25</span>
+                  <span>SEO: 88</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity + Quick Actions -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h3>Recent Activity</h3></div>
+          <div class="card-body">
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--green)"></div>
+              <div class="activity-content">
+                <div class="activity-text"><strong>OpenClaw vs Lindy AI</strong> published to WordPress</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--blue)"></div>
+              <div class="activity-content">
+                <div class="activity-text">New backlink from <strong>saasweekly.com</strong> (DR 52)</div>
+                <div class="activity-time">5 hours ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:#FF4500"></div>
+              <div class="activity-content">
+                <div class="activity-text">Reddit comment got <strong>47 upvotes</strong> on r/SaaS</div>
+                <div class="activity-time">8 hours ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--purple)"></div>
+              <div class="activity-content">
+                <div class="activity-text">Social post repurposed to <strong>Twitter, LinkedIn</strong></div>
+                <div class="activity-time">Yesterday</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--yellow)"></div>
+              <div class="activity-content">
+                <div class="activity-text">Keyword <strong>"ai seo tools"</strong> moved to position #8</div>
+                <div class="activity-time">Yesterday</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--green)"></div>
+              <div class="activity-content">
+                <div class="activity-text"><strong>Top 10 SEO Tools for Founders</strong> indexed by Google</div>
+                <div class="activity-time">2 days ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Quick Actions</h3></div>
+          <div class="card-body">
+            <div class="quick-actions">
+              <div class="quick-action" onclick="showModal('create-article-modal')">
+                <div class="quick-action-icon" style="background:var(--accent-light)">📝</div>
+                <div class="quick-action-label">Write Article</div>
+              </div>
+              <div class="quick-action" onclick="navigate('keywords')">
+                <div class="quick-action-icon" style="background:var(--blue-light)">🔍</div>
+                <div class="quick-action-label">Research Keyword</div>
+              </div>
+              <div class="quick-action" onclick="navigate('backlinks')">
+                <div class="quick-action-icon" style="background:var(--green-light)">🔗</div>
+                <div class="quick-action-label">Find Backlinks</div>
+              </div>
+              <div class="quick-action" onclick="navigate('reddit')">
+                <div class="quick-action-icon" style="background:#FF45001a">💬</div>
+                <div class="quick-action-label">Reddit Radar</div>
+              </div>
+              <div class="quick-action" onclick="navigate('social')">
+                <div class="quick-action-icon" style="background:var(--purple-light)">📱</div>
+                <div class="quick-action-label">Repurpose</div>
+              </div>
+              <div class="quick-action" onclick="navigate('analytics')">
+                <div class="quick-action-icon" style="background:var(--yellow-light)">📊</div>
+                <div class="quick-action-label">View Analytics</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== CONTENT PLANNER ==================== -->
+  <div class="page" id="page-content">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Content Planner</h1>
+          <p>Plan, schedule, and manage your articles.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary btn-sm">Bulk Actions</button>
+          <button class="btn btn-primary btn-sm" onclick="showModal('create-article-modal')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Article
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- Calendar -->
+      <div class="calendar" style="margin-bottom:24px">
+        <div class="calendar-header">
+          <h3>April 2026</h3>
+          <div class="calendar-nav">
+            <button class="btn btn-ghost btn-sm btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+            <button class="btn btn-secondary btn-sm">Today</button>
+            <button class="btn btn-ghost btn-sm btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+          </div>
+        </div>
+        <div class="calendar-grid">
+          <div class="calendar-day-header">Mon</div>
+          <div class="calendar-day-header">Tue</div>
+          <div class="calendar-day-header">Wed</div>
+          <div class="calendar-day-header">Thu</div>
+          <div class="calendar-day-header">Fri</div>
+          <div class="calendar-day-header">Sat</div>
+          <div class="calendar-day-header">Sun</div>
+
+          <div class="calendar-day other-month"><div class="day-num">30</div></div>
+          <div class="calendar-day other-month"><div class="day-num">31</div></div>
+          <div class="calendar-day today"><div class="day-num">1</div><div class="calendar-event published">OpenClaw vs Lindy</div></div>
+          <div class="calendar-day"><div class="day-num">2</div></div>
+          <div class="calendar-day"><div class="day-num">3</div><div class="calendar-event scheduled">AI Writing Tools</div></div>
+          <div class="calendar-day"><div class="day-num">4</div></div>
+          <div class="calendar-day"><div class="day-num">5</div></div>
+
+          <div class="calendar-day"><div class="day-num">6</div></div>
+          <div class="calendar-day"><div class="day-num">7</div><div class="calendar-event scheduled">SEO Automation</div></div>
+          <div class="calendar-day"><div class="day-num">8</div></div>
+          <div class="calendar-day"><div class="day-num">9</div></div>
+          <div class="calendar-day"><div class="day-num">10</div><div class="calendar-event draft">Link Building</div></div>
+          <div class="calendar-day"><div class="day-num">11</div></div>
+          <div class="calendar-day"><div class="day-num">12</div></div>
+
+          <div class="calendar-day"><div class="day-num">13</div></div>
+          <div class="calendar-day"><div class="day-num">14</div><div class="calendar-event scheduled">SaaS Marketing</div></div>
+          <div class="calendar-day"><div class="day-num">15</div></div>
+          <div class="calendar-day"><div class="day-num">16</div></div>
+          <div class="calendar-day"><div class="day-num">17</div><div class="calendar-event scheduled">Reddit for SaaS</div></div>
+          <div class="calendar-day"><div class="day-num">18</div></div>
+          <div class="calendar-day"><div class="day-num">19</div></div>
+
+          <div class="calendar-day"><div class="day-num">20</div></div>
+          <div class="calendar-day"><div class="day-num">21</div><div class="calendar-event scheduled">Customer Support AI</div></div>
+          <div class="calendar-day"><div class="day-num">22</div></div>
+          <div class="calendar-day"><div class="day-num">23</div></div>
+          <div class="calendar-day"><div class="day-num">24</div><div class="calendar-event draft">Backlink Strategy</div></div>
+          <div class="calendar-day"><div class="day-num">25</div></div>
+          <div class="calendar-day"><div class="day-num">26</div></div>
+
+          <div class="calendar-day"><div class="day-num">27</div></div>
+          <div class="calendar-day"><div class="day-num">28</div><div class="calendar-event scheduled">Programmatic SEO</div></div>
+          <div class="calendar-day"><div class="day-num">29</div></div>
+          <div class="calendar-day"><div class="day-num">30</div></div>
+          <div class="calendar-day other-month"><div class="day-num">1</div></div>
+          <div class="calendar-day other-month"><div class="day-num">2</div></div>
+          <div class="calendar-day other-month"><div class="day-num">3</div></div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-chip active" onclick="filterArticles(this,'all')">All (12)</div>
+        <div class="filter-chip" onclick="filterArticles(this,'draft')">Draft (3)</div>
+        <div class="filter-chip" onclick="filterArticles(this,'scheduled')">Scheduled (4)</div>
+        <div class="filter-chip" onclick="filterArticles(this,'published')">Published (4)</div>
+        <div class="filter-chip" onclick="filterArticles(this,'failed')">Failed (1)</div>
+        <div style="flex:1"></div>
+        <div class="search-input" style="width:240px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" placeholder="Search articles...">
+        </div>
+      </div>
+
+      <!-- Articles table -->
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" style="cursor:pointer"></th>
+                <th>Title</th>
+                <th>Keyword</th>
+                <th>Status</th>
+                <th>Words</th>
+                <th>SEO</th>
+                <th>Scheduled</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="article-row" data-status="published" onclick="showModal('article-detail-modal')">
+                <td><input type="checkbox" style="cursor:pointer" onclick="event.stopPropagation()"></td>
+                <td style="font-weight:500">OpenClaw vs Lindy AI: Complete Comparison</td>
+                <td style="color:var(--text-secondary)">openclaw vs lindy</td>
+                <td><span class="badge badge-green">Published</span></td>
+                <td>3,450</td>
+                <td><span style="color:var(--green);font-weight:600">91</span></td>
+                <td style="color:var(--text-secondary)">Mar 28</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="published">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">Top 10 SEO Tools for Founders in 2026</td>
+                <td style="color:var(--text-secondary)">seo tools for founders</td>
+                <td><span class="badge badge-green">Published</span></td>
+                <td>2,890</td>
+                <td><span style="color:var(--green);font-weight:600">88</span></td>
+                <td style="color:var(--text-secondary)">Mar 25</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="scheduled">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">Best AI Writing Tools 2026</td>
+                <td style="color:var(--text-secondary)">ai writing tools</td>
+                <td><span class="badge badge-blue">Scheduled</span></td>
+                <td>3,100</td>
+                <td><span style="color:var(--blue);font-weight:600">84</span></td>
+                <td style="color:var(--text-secondary)">Apr 3</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="scheduled">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">How to Automate SEO Content at Scale</td>
+                <td style="color:var(--text-secondary)">automate seo content</td>
+                <td><span class="badge badge-blue">Scheduled</span></td>
+                <td>2,600</td>
+                <td><span style="color:var(--blue);font-weight:600">79</span></td>
+                <td style="color:var(--text-secondary)">Apr 7</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="draft">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">Link Building Strategies That Actually Work</td>
+                <td style="color:var(--text-secondary)">link building strategies</td>
+                <td><span class="badge badge-yellow">Draft</span></td>
+                <td>1,800</td>
+                <td><span style="color:var(--yellow);font-weight:600">67</span></td>
+                <td style="color:var(--text-muted)">Not set</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="scheduled">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">SaaS Content Marketing: The Complete Guide</td>
+                <td style="color:var(--text-secondary)">saas content marketing</td>
+                <td><span class="badge badge-blue">Scheduled</span></td>
+                <td>4,200</td>
+                <td><span style="color:var(--green);font-weight:600">86</span></td>
+                <td style="color:var(--text-secondary)">Apr 14</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="published">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">How to Get Backlinks Without Outreach</td>
+                <td style="color:var(--text-secondary)">get backlinks without outreach</td>
+                <td><span class="badge badge-green">Published</span></td>
+                <td>2,300</td>
+                <td><span style="color:var(--green);font-weight:600">82</span></td>
+                <td style="color:var(--text-secondary)">Mar 20</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="draft">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">Reddit Marketing for SaaS: 2026 Playbook</td>
+                <td style="color:var(--text-secondary)">reddit marketing saas</td>
+                <td><span class="badge badge-yellow">Draft</span></td>
+                <td>2,100</td>
+                <td><span style="color:var(--yellow);font-weight:600">78</span></td>
+                <td style="color:var(--text-muted)">Not set</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="failed">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">AI Chatbot Comparison: Top 5 Picks</td>
+                <td style="color:var(--text-secondary)">ai chatbot comparison</td>
+                <td><span class="badge badge-red">Failed</span></td>
+                <td>0</td>
+                <td><span style="color:var(--text-muted)">--</span></td>
+                <td style="color:var(--text-muted)">Mar 22</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="published">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">Distribb vs Surfer SEO: Honest Review</td>
+                <td style="color:var(--text-secondary)">distribb vs surfer seo</td>
+                <td><span class="badge badge-green">Published</span></td>
+                <td>3,600</td>
+                <td><span style="color:var(--green);font-weight:600">93</span></td>
+                <td style="color:var(--text-secondary)">Mar 15</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="draft">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">Backlink Exchange Networks: What Works</td>
+                <td style="color:var(--text-secondary)">backlink exchange</td>
+                <td><span class="badge badge-yellow">Draft</span></td>
+                <td>900</td>
+                <td><span style="color:var(--text-muted)">--</span></td>
+                <td style="color:var(--text-muted)">Not set</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+              <tr class="article-row" data-status="scheduled">
+                <td><input type="checkbox" style="cursor:pointer"></td>
+                <td style="font-weight:500">Programmatic SEO for Startups: Step by Step</td>
+                <td style="color:var(--text-secondary)">programmatic seo startups</td>
+                <td><span class="badge badge-blue">Scheduled</span></td>
+                <td>2,400</td>
+                <td><span style="color:var(--blue);font-weight:600">80</span></td>
+                <td style="color:var(--text-secondary)">Apr 28</td>
+                <td><button class="btn btn-ghost btn-sm btn-icon">···</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== KEYWORD RESEARCH ==================== -->
+  <div class="page" id="page-keywords">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Keyword Research</h1>
+          <p>Discover high-impact keywords for your content strategy.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm">Export CSV</button>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- Search bar -->
+      <div class="search-input" style="margin-bottom:24px;max-width:600px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Enter a seed keyword, URL, or topic..." value="ai seo tools">
+        <button class="btn btn-primary btn-sm">Research</button>
+      </div>
+
+      <!-- Results + Saved -->
+      <div class="grid-2 gap-24">
+        <div>
+          <!-- Results table -->
+          <div class="card" style="margin-bottom:24px">
+            <div class="card-header">
+              <h3>Keyword Results</h3>
+              <span style="font-size:12px;color:var(--text-muted)">247 keywords found</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Keyword</th>
+                    <th>Volume</th>
+                    <th>KD</th>
+                    <th>CPC</th>
+                    <th>Intent</th>
+                    <th>Trend</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:500">ai seo tools</td>
+                    <td>12,100</td>
+                    <td><span style="color:var(--yellow);font-weight:600">38</span></td>
+                    <td>$4.20</td>
+                    <td><span class="badge badge-purple">Commercial</span></td>
+                    <td>
+                      <div class="sparkline"><div class="sparkline-bar" style="height:8px"></div><div class="sparkline-bar" style="height:10px"></div><div class="sparkline-bar" style="height:12px"></div><div class="sparkline-bar" style="height:14px"></div><div class="sparkline-bar" style="height:16px"></div><div class="sparkline-bar" style="height:20px"></div></div>
+                    </td>
+                    <td><button class="btn btn-ghost btn-sm" style="color:var(--accent)">+ Save</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">best ai seo software</td>
+                    <td>8,100</td>
+                    <td><span style="color:var(--green);font-weight:600">24</span></td>
+                    <td>$5.80</td>
+                    <td><span class="badge badge-purple">Commercial</span></td>
+                    <td>
+                      <div class="sparkline"><div class="sparkline-bar" style="height:6px"></div><div class="sparkline-bar" style="height:10px"></div><div class="sparkline-bar" style="height:14px"></div><div class="sparkline-bar" style="height:12px"></div><div class="sparkline-bar" style="height:18px"></div><div class="sparkline-bar" style="height:20px"></div></div>
+                    </td>
+                    <td><button class="btn btn-ghost btn-sm" style="color:var(--accent)">+ Save</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">how to use ai for seo</td>
+                    <td>6,600</td>
+                    <td><span style="color:var(--green);font-weight:600">18</span></td>
+                    <td>$2.10</td>
+                    <td><span class="badge badge-blue">Informational</span></td>
+                    <td>
+                      <div class="sparkline"><div class="sparkline-bar" style="height:10px"></div><div class="sparkline-bar" style="height:12px"></div><div class="sparkline-bar" style="height:11px"></div><div class="sparkline-bar" style="height:15px"></div><div class="sparkline-bar" style="height:17px"></div><div class="sparkline-bar" style="height:20px"></div></div>
+                    </td>
+                    <td><button class="btn btn-ghost btn-sm" style="color:var(--accent)">+ Save</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">ai content optimization</td>
+                    <td>4,400</td>
+                    <td><span style="color:var(--yellow);font-weight:600">42</span></td>
+                    <td>$3.50</td>
+                    <td><span class="badge badge-blue">Informational</span></td>
+                    <td>
+                      <div class="sparkline"><div class="sparkline-bar" style="height:12px"></div><div class="sparkline-bar" style="height:14px"></div><div class="sparkline-bar" style="height:13px"></div><div class="sparkline-bar" style="height:16px"></div><div class="sparkline-bar" style="height:18px"></div><div class="sparkline-bar" style="height:20px"></div></div>
+                    </td>
+                    <td><button class="btn btn-ghost btn-sm" style="color:var(--accent)">+ Save</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">seo automation tools</td>
+                    <td>3,600</td>
+                    <td><span style="color:var(--yellow);font-weight:600">35</span></td>
+                    <td>$4.80</td>
+                    <td><span class="badge badge-purple">Commercial</span></td>
+                    <td>
+                      <div class="sparkline"><div class="sparkline-bar" style="height:14px"></div><div class="sparkline-bar" style="height:15px"></div><div class="sparkline-bar" style="height:16px"></div><div class="sparkline-bar" style="height:17px"></div><div class="sparkline-bar" style="height:19px"></div><div class="sparkline-bar" style="height:20px"></div></div>
+                    </td>
+                    <td><button class="btn btn-ghost btn-sm" style="color:var(--accent)">+ Save</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">distribb alternative</td>
+                    <td>1,900</td>
+                    <td><span style="color:var(--green);font-weight:600">12</span></td>
+                    <td>$6.20</td>
+                    <td><span class="badge badge-green">Navigational</span></td>
+                    <td>
+                      <div class="sparkline"><div class="sparkline-bar" style="height:4px"></div><div class="sparkline-bar" style="height:6px"></div><div class="sparkline-bar" style="height:10px"></div><div class="sparkline-bar" style="height:14px"></div><div class="sparkline-bar" style="height:18px"></div><div class="sparkline-bar" style="height:20px"></div></div>
+                    </td>
+                    <td><button class="btn btn-ghost btn-sm" style="color:var(--accent)">+ Save</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">programmatic seo</td>
+                    <td>5,200</td>
+                    <td><span style="color:var(--red);font-weight:600">56</span></td>
+                    <td>$3.90</td>
+                    <td><span class="badge badge-blue">Informational</span></td>
+                    <td>
+                      <div class="sparkline"><div class="sparkline-bar" style="height:16px"></div><div class="sparkline-bar" style="height:17px"></div><div class="sparkline-bar" style="height:18px"></div><div class="sparkline-bar" style="height:18px"></div><div class="sparkline-bar" style="height:19px"></div><div class="sparkline-bar" style="height:20px"></div></div>
+                    </td>
+                    <td><button class="btn btn-ghost btn-sm" style="color:var(--accent)">+ Save</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Keyword suggestions -->
+          <div class="card">
+            <div class="card-header"><h3>Keyword Suggestions</h3></div>
+            <div class="card-body">
+              <div style="margin-bottom:16px">
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px">Related Keywords</div>
+                <div>
+                  <span class="suggestion-tag">seo writing assistant</span>
+                  <span class="suggestion-tag">ai blog writer</span>
+                  <span class="suggestion-tag">automated seo</span>
+                  <span class="suggestion-tag">ai content generator</span>
+                  <span class="suggestion-tag">seo content optimization</span>
+                </div>
+              </div>
+              <div style="margin-bottom:16px">
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px">Questions</div>
+                <div>
+                  <span class="suggestion-tag">what is the best ai seo tool</span>
+                  <span class="suggestion-tag">how to automate seo with ai</span>
+                  <span class="suggestion-tag">can ai write seo content</span>
+                  <span class="suggestion-tag">is ai content good for seo</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px">Long-tail Keywords</div>
+                <div>
+                  <span class="suggestion-tag">best ai seo tools for small business</span>
+                  <span class="suggestion-tag">free ai seo content writer</span>
+                  <span class="suggestion-tag">ai seo tools for ecommerce</span>
+                  <span class="suggestion-tag">ai seo tools vs manual seo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- My Keywords -->
+          <div class="card" style="margin-bottom:24px">
+            <div class="card-header">
+              <h3>My Keywords</h3>
+              <span class="badge badge-gray">14 saved</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Keyword</th><th>Vol</th><th>KD</th><th></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td style="font-weight:500">ai seo tools</td><td>12.1K</td><td>38</td><td><button class="btn btn-ghost btn-sm btn-icon" style="color:var(--red)">✕</button></td></tr>
+                  <tr><td style="font-weight:500">best seo software 2026</td><td>9.8K</td><td>45</td><td><button class="btn btn-ghost btn-sm btn-icon" style="color:var(--red)">✕</button></td></tr>
+                  <tr><td style="font-weight:500">automated link building</td><td>3.2K</td><td>31</td><td><button class="btn btn-ghost btn-sm btn-icon" style="color:var(--red)">✕</button></td></tr>
+                  <tr><td style="font-weight:500">saas seo strategy</td><td>2.8K</td><td>28</td><td><button class="btn btn-ghost btn-sm btn-icon" style="color:var(--red)">✕</button></td></tr>
+                  <tr><td style="font-weight:500">content marketing automation</td><td>4.1K</td><td>33</td><td><button class="btn btn-ghost btn-sm btn-icon" style="color:var(--red)">✕</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Competitor Gap -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Competitor Keyword Gap</h3>
+              <button class="btn btn-ghost btn-sm">Add competitor</button>
+            </div>
+            <div class="card-body">
+              <div class="input-group">
+                <label>Your domain</label>
+                <input class="input" type="text" value="openclawlab.xyz" readonly style="background:var(--bg)">
+              </div>
+              <div class="input-group">
+                <label>Competitor domain</label>
+                <input class="input" type="text" value="surfer.seo" placeholder="e.g., competitor.com">
+              </div>
+              <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Analyze Gap</button>
+
+              <div style="margin-top:20px">
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:10px">Missing keywords (they rank, you don't)</div>
+                <table style="font-size:12px">
+                  <tr><td style="font-weight:500;padding:6px 8px">on page seo checker</td><td style="padding:6px 8px;color:var(--text-muted)">5.4K</td></tr>
+                  <tr><td style="font-weight:500;padding:6px 8px">content score seo</td><td style="padding:6px 8px;color:var(--text-muted)">3.1K</td></tr>
+                  <tr><td style="font-weight:500;padding:6px 8px">seo content brief generator</td><td style="padding:6px 8px;color:var(--text-muted)">2.7K</td></tr>
+                  <tr><td style="font-weight:500;padding:6px 8px">serp analyzer tool</td><td style="padding:6px 8px;color:var(--text-muted)">1.9K</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== BACKLINKS EXCHANGE ==================== -->
+  <div class="page" id="page-backlinks">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Backlinks Exchange</h1>
+          <p>Earn credits by linking out, spend them to get links back.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="showModal('find-partners-modal')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          Find Partners
+        </button>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- Stats -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--blue-light)">🔗</div>
+          <div class="metric-value">128</div>
+          <div class="metric-label">Total Backlinks</div>
+          <div class="metric-change up">+23 this month</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--green-light)">💰</div>
+          <div class="metric-value">342</div>
+          <div class="metric-label">Credits Earned</div>
+          <div class="metric-change up">+58 this month</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--accent-light)">🔥</div>
+          <div class="metric-value">215</div>
+          <div class="metric-label">Credits Spent</div>
+          <div class="metric-change" style="color:var(--text-muted)">127 remaining</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--purple-light)">📈</div>
+          <div class="metric-value">34</div>
+          <div class="metric-label">Domain Rating</div>
+          <div class="metric-change up">+6 from start</div>
+        </div>
+      </div>
+
+      <div class="tabs" id="backlink-tabs">
+        <button class="tab active" onclick="switchTab(this,'bl-your')">Your Links (outgoing)</button>
+        <button class="tab" onclick="switchTab(this,'bl-incoming')">Links to You (incoming)</button>
+        <button class="tab" onclick="switchTab(this,'bl-credits')">Credit History</button>
+      </div>
+
+      <!-- Your links -->
+      <div class="tab-content active" id="bl-your">
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Your Article</th><th>Links To</th><th>Partner DR</th><th>Credits</th><th>Status</th><th>Date</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:500">Top 10 SEO Tools for Founders</td>
+                  <td style="color:var(--blue)">writesonic.com</td>
+                  <td>62</td>
+                  <td style="color:var(--green);font-weight:600">+3</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted)">Mar 25</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500">Best AI Writing Tools 2026</td>
+                  <td style="color:var(--blue)">jasper.ai</td>
+                  <td>71</td>
+                  <td style="color:var(--green);font-weight:600">+4</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted)">Mar 23</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500">OpenClaw vs Lindy AI</td>
+                  <td style="color:var(--blue)">toolify.ai</td>
+                  <td>48</td>
+                  <td style="color:var(--green);font-weight:600">+2</td>
+                  <td><span class="badge badge-yellow">Pending</span></td>
+                  <td style="color:var(--text-muted)">Mar 28</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500">SaaS Content Marketing Guide</td>
+                  <td style="color:var(--blue)">contentatscale.ai</td>
+                  <td>55</td>
+                  <td style="color:var(--green);font-weight:600">+3</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted)">Mar 20</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500">How to Get Backlinks Without Outreach</td>
+                  <td style="color:var(--blue)">ahrefs.com/blog</td>
+                  <td>92</td>
+                  <td style="color:var(--green);font-weight:600">+5</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted)">Mar 18</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Incoming links -->
+      <div class="tab-content" id="bl-incoming" style="display:none">
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>From</th><th>To (your article)</th><th>Partner DR</th><th>Credits</th><th>Status</th><th>Date</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color:var(--blue)">saasweekly.com</td>
+                  <td style="font-weight:500">Top 10 SEO Tools for Founders</td>
+                  <td>52</td>
+                  <td style="color:var(--red);font-weight:600">-3</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted)">Mar 26</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--blue)">startupresources.io</td>
+                  <td style="font-weight:500">OpenClaw vs Lindy AI</td>
+                  <td>44</td>
+                  <td style="color:var(--red);font-weight:600">-2</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted)">Mar 24</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--blue)">foundersblog.co</td>
+                  <td style="font-weight:500">How to Get Backlinks Without Outreach</td>
+                  <td>38</td>
+                  <td style="color:var(--red);font-weight:600">-2</td>
+                  <td><span class="badge badge-yellow">Pending</span></td>
+                  <td style="color:var(--text-muted)">Mar 29</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--blue)">growthhackers.com</td>
+                  <td style="font-weight:500">Distribb vs Surfer SEO</td>
+                  <td>68</td>
+                  <td style="color:var(--red);font-weight:600">-4</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted)">Mar 22</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Credit history -->
+      <div class="tab-content" id="bl-credits" style="display:none">
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:24px;margin-bottom:24px;padding:20px;background:var(--bg);border-radius:var(--radius)">
+              <div>
+                <div class="credit-label">Available Balance</div>
+                <div class="credit-display" style="color:var(--accent)">127 <span style="font-size:14px;font-weight:500;color:var(--text-muted)">credits</span></div>
+              </div>
+              <div style="width:1px;height:40px;background:var(--border)"></div>
+              <div>
+                <div class="credit-label">Earned (all time)</div>
+                <div style="font-size:20px;font-weight:700;color:var(--green)">342</div>
+              </div>
+              <div style="width:1px;height:40px;background:var(--border)"></div>
+              <div>
+                <div class="credit-label">Spent (all time)</div>
+                <div style="font-size:20px;font-weight:700;color:var(--text-secondary)">215</div>
+              </div>
+            </div>
+            <table>
+              <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Balance</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--text-muted)">Mar 28</td><td>Link placed in "OpenClaw vs Lindy AI" to toolify.ai</td><td style="color:var(--green);font-weight:600">+2</td><td>127</td></tr>
+                <tr><td style="color:var(--text-muted)">Mar 26</td><td>Incoming link from saasweekly.com</td><td style="color:var(--red);font-weight:600">-3</td><td>125</td></tr>
+                <tr><td style="color:var(--text-muted)">Mar 25</td><td>Link placed in "Top 10 SEO Tools" to writesonic.com</td><td style="color:var(--green);font-weight:600">+3</td><td>128</td></tr>
+                <tr><td style="color:var(--text-muted)">Mar 24</td><td>Incoming link from startupresources.io</td><td style="color:var(--red);font-weight:600">-2</td><td>125</td></tr>
+                <tr><td style="color:var(--text-muted)">Mar 23</td><td>Link placed in "Best AI Writing Tools" to jasper.ai</td><td style="color:var(--green);font-weight:600">+4</td><td>127</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== REDDIT RADAR ==================== -->
+  <div class="page" id="page-reddit">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Reddit Radar</h1>
+          <p>AI finds relevant threads. You get the traffic.</p>
+        </div>
+        <button class="btn btn-primary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Track Subreddit
+        </button>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- Stats -->
+      <div class="metrics-grid" style="margin-bottom:24px">
+        <div class="metric-card">
+          <div class="metric-icon" style="background:#FF45001a">💬</div>
+          <div class="metric-value">34</div>
+          <div class="metric-label">Comments Posted</div>
+          <div class="metric-change up">+8 this week</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--accent-light)">⬆️</div>
+          <div class="metric-value">412</div>
+          <div class="metric-label">Total Upvotes</div>
+          <div class="metric-change up">+89 this week</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--green-light)">🌐</div>
+          <div class="metric-value">1,247</div>
+          <div class="metric-label">Traffic Driven</div>
+          <div class="metric-change up">+340 this month</div>
+        </div>
+      </div>
+
+      <div class="grid-2 gap-24">
+        <div>
+          <!-- Thread feed -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <h3 style="font-size:15px;font-weight:600">Relevant Threads</h3>
+            <span class="badge badge-gray">Updated 12 min ago</span>
+          </div>
+
+          <div class="thread-card">
+            <div class="thread-meta">
+              <span class="subreddit-tag">r/SaaS</span>
+              <span>142 upvotes</span>
+              <span>38 comments</span>
+              <span style="color:var(--green);font-weight:600">96% relevant</span>
+            </div>
+            <div class="thread-title">What SEO tools are you using for your SaaS blog? Looking for recommendations.</div>
+            <div class="thread-suggestion">
+              <strong>Suggested comment:</strong> "We switched to Distribb for our blog at openclawlab.xyz and went from 0 to 47 articles in 3 months. The backlink exchange feature alone got us 128 links. Happy to share specifics if helpful."
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn btn-primary btn-sm">Post Comment</button>
+              <button class="btn btn-secondary btn-sm">Edit</button>
+              <button class="btn btn-ghost btn-sm">Skip</button>
+            </div>
+          </div>
+
+          <div class="thread-card">
+            <div class="thread-meta">
+              <span class="subreddit-tag">r/Entrepreneur</span>
+              <span>89 upvotes</span>
+              <span>24 comments</span>
+              <span style="color:var(--green);font-weight:600">91% relevant</span>
+            </div>
+            <div class="thread-title">How do you handle content marketing as a solo founder? Can't afford to hire writers.</div>
+            <div class="thread-suggestion">
+              <strong>Suggested comment:</strong> "AI content tools have gotten really good. I publish 3x/week now without hiring anyone. The key is using a tool that also handles distribution, not just writing. Game changer for organic traffic."
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn btn-primary btn-sm">Post Comment</button>
+              <button class="btn btn-secondary btn-sm">Edit</button>
+              <button class="btn btn-ghost btn-sm">Skip</button>
+            </div>
+          </div>
+
+          <div class="thread-card">
+            <div class="thread-meta">
+              <span class="subreddit-tag">r/SEO</span>
+              <span>67 upvotes</span>
+              <span>51 comments</span>
+              <span style="color:var(--yellow);font-weight:600">82% relevant</span>
+            </div>
+            <div class="thread-title">AI-generated content ranking well in 2026? Share your experience.</div>
+            <div class="thread-suggestion">
+              <strong>Suggested comment:</strong> "Running an experiment with AI articles on our blog. 47 published so far. Seeing position 1-10 rankings on 12 keywords. Trick: optimize for real SEO signals (links, structure, E-E-A-T) not just word count."
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn btn-primary btn-sm">Post Comment</button>
+              <button class="btn btn-secondary btn-sm">Edit</button>
+              <button class="btn btn-ghost btn-sm">Skip</button>
+            </div>
+          </div>
+
+          <div class="thread-card">
+            <div class="thread-meta">
+              <span class="subreddit-tag">r/startups</span>
+              <span>45 upvotes</span>
+              <span>19 comments</span>
+              <span style="color:var(--yellow);font-weight:600">78% relevant</span>
+            </div>
+            <div class="thread-title">Our startup reached $10K MRR through organic only. No paid ads. Here's what we did.</div>
+            <div class="thread-suggestion">
+              <strong>Suggested comment:</strong> "Congrats! Similar path here. Organic SEO + backlink exchanges + Reddit presence got us to consistent traffic. What's your content cadence looking like?"
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn btn-primary btn-sm">Post Comment</button>
+              <button class="btn btn-secondary btn-sm">Edit</button>
+              <button class="btn btn-ghost btn-sm">Skip</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Tracked subreddits -->
+          <div class="card" style="margin-bottom:24px">
+            <div class="card-header"><h3>Tracked Subreddits</h3></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span class="subreddit-tag">r/SaaS</span>
+                    <span style="font-size:11px;color:var(--text-muted)">289K members</span>
+                  </div>
+                  <span class="badge badge-green">Active</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--border)">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span class="subreddit-tag">r/Entrepreneur</span>
+                    <span style="font-size:11px;color:var(--text-muted)">2.1M members</span>
+                  </div>
+                  <span class="badge badge-green">Active</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--border)">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span class="subreddit-tag">r/SEO</span>
+                    <span style="font-size:11px;color:var(--text-muted)">412K members</span>
+                  </div>
+                  <span class="badge badge-green">Active</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--border)">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span class="subreddit-tag">r/startups</span>
+                    <span style="font-size:11px;color:var(--text-muted)">1.3M members</span>
+                  </div>
+                  <span class="badge badge-green">Active</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--border)">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span class="subreddit-tag">r/indiehackers</span>
+                    <span style="font-size:11px;color:var(--text-muted)">98K members</span>
+                  </div>
+                  <span class="badge badge-green">Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comment history -->
+          <div class="card">
+            <div class="card-header"><h3>Recent Comments</h3></div>
+            <div class="card-body" style="max-height:400px;overflow-y:auto">
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--green)"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>r/SaaS</strong>: "What SEO tools do you use?"</div>
+                  <div class="activity-time">47 upvotes, 3 replies. 2 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--green)"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>r/Entrepreneur</strong>: "Solo founder content strategy"</div>
+                  <div class="activity-time">23 upvotes, 1 reply. 5 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--yellow)"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>r/SEO</strong>: "AI content ranking in 2026"</div>
+                  <div class="activity-time">12 upvotes, 0 replies. Yesterday</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--green)"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>r/startups</strong>: "Organic growth strategies"</div>
+                  <div class="activity-time">31 upvotes, 5 replies. 2 days ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--gray)"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>r/indiehackers</strong>: "Building in public thread"</div>
+                  <div class="activity-time">8 upvotes, 0 replies. 3 days ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== SOCIAL MEDIA ==================== -->
+  <div class="page" id="page-social">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Social Media</h1>
+          <p>Repurpose articles into social posts across every platform.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm">Schedule Queue (7)</button>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- Metrics -->
+      <div class="metrics-grid" style="margin-bottom:24px">
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--purple-light)">📱</div>
+          <div class="metric-value">89</div>
+          <div class="metric-label">Posts Published</div>
+          <div class="metric-change up">+15 this month</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--blue-light)">👁️</div>
+          <div class="metric-value">45.2K</div>
+          <div class="metric-label">Total Impressions</div>
+          <div class="metric-change up">+8.4K this month</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--green-light)">💬</div>
+          <div class="metric-value">892</div>
+          <div class="metric-label">Engagements</div>
+          <div class="metric-change up">+156 this month</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--accent-light)">🔗</div>
+          <div class="metric-value">2.1K</div>
+          <div class="metric-label">Link Clicks</div>
+          <div class="metric-change up">+380 this month</div>
+        </div>
+      </div>
+
+      <div class="grid-2 gap-24">
+        <div>
+          <!-- Article selector -->
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-header"><h3>Select Article to Repurpose</h3></div>
+            <div class="card-body">
+              <select style="margin-bottom:12px">
+                <option>OpenClaw vs Lindy AI: Complete Comparison</option>
+                <option>Top 10 SEO Tools for Founders in 2026</option>
+                <option>How to Get Backlinks Without Outreach</option>
+                <option>Distribb vs Surfer SEO: Honest Review</option>
+                <option>Best AI Writing Tools 2026</option>
+              </select>
+
+              <!-- Platform selection -->
+              <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px">Target Platform</div>
+              <div class="platform-icons" style="margin-bottom:16px">
+                <div class="platform-icon active" title="Twitter/X" onclick="selectPlatform(this)">𝕏</div>
+                <div class="platform-icon" title="LinkedIn" onclick="selectPlatform(this)">in</div>
+                <div class="platform-icon" title="Medium" onclick="selectPlatform(this)">M</div>
+                <div class="platform-icon" title="Facebook" onclick="selectPlatform(this)">f</div>
+                <div class="platform-icon" title="Instagram" onclick="selectPlatform(this)">📷</div>
+                <div class="platform-icon" title="Threads" onclick="selectPlatform(this)">@</div>
+                <div class="platform-icon" title="Bluesky" onclick="selectPlatform(this)">🦋</div>
+                <div class="platform-icon" title="Mastodon" onclick="selectPlatform(this)">🐘</div>
+                <div class="platform-icon" title="Pinterest" onclick="selectPlatform(this)">📌</div>
+                <div class="platform-icon" title="TikTok" onclick="selectPlatform(this)">🎵</div>
+                <div class="platform-icon" title="YouTube" onclick="selectPlatform(this)">▶</div>
+                <div class="platform-icon" title="Hacker News" onclick="selectPlatform(this)">Y</div>
+                <div class="platform-icon" title="Dev.to" onclick="selectPlatform(this)">🖥</div>
+              </div>
+
+              <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Generate Post</button>
+            </div>
+          </div>
+
+          <!-- Post preview -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Post Preview (Twitter/X)</h3>
+              <button class="btn btn-ghost btn-sm">Regenerate</button>
+            </div>
+            <div class="card-body">
+              <div class="post-preview">
+                <div class="post-preview-header">
+                  <div class="post-preview-avatar" style="background:linear-gradient(135deg,var(--accent),#FF9A5C)"></div>
+                  <div>
+                    <div class="post-preview-name">Florian Darroman</div>
+                    <div style="font-size:11px;color:var(--text-muted)">@floriandarroman</div>
+                  </div>
+                </div>
+                <div class="post-preview-text">We compared OpenClaw and Lindy AI head to head.
+
+Pricing, features, integrations, the actual user experience.
+
+Short version: one is built for founders who want full control. The other is great if you want a quick setup.
+
+Full breakdown with real screenshots 👇
+openclawlab.xyz/openclaw-vs-lindy-ai</div>
+              </div>
+              <div style="margin-top:16px;display:flex;gap:8px">
+                <button class="btn btn-secondary btn-sm">Edit</button>
+                <button class="btn btn-primary btn-sm">Schedule Post</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Performance metrics -->
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-header"><h3>Platform Performance (Last 30 days)</h3></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;align-items:center;justify-content:between;padding:8px 0">
+                  <div style="display:flex;align-items:center;gap:10px;flex:1">
+                    <div class="platform-icon" style="font-size:12px">𝕏</div>
+                    <span style="font-size:13px;font-weight:500">Twitter/X</span>
+                  </div>
+                  <div style="display:flex;gap:16px;font-size:12px;color:var(--text-muted)">
+                    <span><strong>23</strong> posts</span>
+                    <span><strong>18.2K</strong> views</span>
+                    <span><strong>412</strong> clicks</span>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-between;padding:8px 0;border-top:1px solid var(--border)">
+                  <div style="display:flex;align-items:center;gap:10px;flex:1">
+                    <div class="platform-icon" style="font-size:12px">in</div>
+                    <span style="font-size:13px;font-weight:500">LinkedIn</span>
+                  </div>
+                  <div style="display:flex;gap:16px;font-size:12px;color:var(--text-muted)">
+                    <span><strong>15</strong> posts</span>
+                    <span><strong>12.8K</strong> views</span>
+                    <span><strong>287</strong> clicks</span>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-between;padding:8px 0;border-top:1px solid var(--border)">
+                  <div style="display:flex;align-items:center;gap:10px;flex:1">
+                    <div class="platform-icon" style="font-size:12px">M</div>
+                    <span style="font-size:13px;font-weight:500">Medium</span>
+                  </div>
+                  <div style="display:flex;gap:16px;font-size:12px;color:var(--text-muted)">
+                    <span><strong>8</strong> posts</span>
+                    <span><strong>6.4K</strong> views</span>
+                    <span><strong>156</strong> clicks</span>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-between;padding:8px 0;border-top:1px solid var(--border)">
+                  <div style="display:flex;align-items:center;gap:10px;flex:1">
+                    <div class="platform-icon" style="font-size:12px">🦋</div>
+                    <span style="font-size:13px;font-weight:500">Bluesky</span>
+                  </div>
+                  <div style="display:flex;gap:16px;font-size:12px;color:var(--text-muted)">
+                    <span><strong>12</strong> posts</span>
+                    <span><strong>4.1K</strong> views</span>
+                    <span><strong>89</strong> clicks</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scheduled posts -->
+          <div class="card">
+            <div class="card-header"><h3>Scheduled Posts</h3></div>
+            <div class="card-body" style="max-height:300px;overflow-y:auto">
+              <div class="activity-item">
+                <div class="activity-dot" style="background:#1DA1F2"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Twitter/X:</strong> "Best AI Writing Tools 2026"</div>
+                  <div class="activity-time">Today at 3:00 PM</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:#0077B5"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>LinkedIn:</strong> "How to Automate SEO Content"</div>
+                  <div class="activity-time">Tomorrow at 9:00 AM</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:#1DA1F2"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Twitter/X:</strong> "SaaS Content Marketing"</div>
+                  <div class="activity-time">Apr 3 at 2:00 PM</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:#00D4AA"></div>
+                <div class="activity-content">
+                  <div class="activity-text"><strong>Medium:</strong> "Link Building Strategies"</div>
+                  <div class="activity-time">Apr 5 at 10:00 AM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== INTEGRATIONS ==================== -->
+  <div class="page" id="page-integrations">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Integrations</h1>
+          <p>Connect your favorite tools and platforms.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm">View API Docs</button>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- Integration grid -->
+      <div class="grid-3">
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:#21759B;color:#fff">W</div>
+            <div class="integration-info">
+              <h4>WordPress</h4>
+              <p>Publish articles directly to your WordPress site</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot connected"></div>
+              <span style="color:var(--green)">Connected</span>
+            </div>
+            <button class="btn btn-secondary btn-sm">Configure</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Last sync: 2 hours ago</div>
+        </div>
+
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:#000;color:#fff">N</div>
+            <div class="integration-info">
+              <h4>Notion</h4>
+              <p>Sync content calendar and drafts with Notion</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot connected"></div>
+              <span style="color:var(--green)">Connected</span>
+            </div>
+            <button class="btn btn-secondary btn-sm">Configure</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Last sync: 12 minutes ago</div>
+        </div>
+
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:#4353FF;color:#fff">W</div>
+            <div class="integration-info">
+              <h4>Webflow</h4>
+              <p>Publish SEO content to your Webflow CMS</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot disconnected"></div>
+              <span style="color:var(--text-muted)">Not connected</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Connect</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Never synced</div>
+        </div>
+
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:#95BF47;color:#fff">S</div>
+            <div class="integration-info">
+              <h4>Shopify</h4>
+              <p>Manage blog content for your ecommerce store</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot disconnected"></div>
+              <span style="color:var(--text-muted)">Not connected</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Connect</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Never synced</div>
+        </div>
+
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:#0073AA;color:#fff">W</div>
+            <div class="integration-info">
+              <h4>Wix</h4>
+              <p>Publish articles to your Wix blog automatically</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot disconnected"></div>
+              <span style="color:var(--text-muted)">Not connected</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Connect</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Never synced</div>
+        </div>
+
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:#738A94;color:#fff">G</div>
+            <div class="integration-info">
+              <h4>Ghost</h4>
+              <p>Seamless publishing to your Ghost publication</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot disconnected"></div>
+              <span style="color:var(--text-muted)">Not connected</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Connect</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Never synced</div>
+        </div>
+
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:var(--accent);color:#fff">G</div>
+            <div class="integration-info">
+              <h4>GoHighLevel</h4>
+              <p>Sync content with your GHL funnel pages</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot disconnected"></div>
+              <span style="color:var(--text-muted)">Not connected</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Connect</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Never synced</div>
+        </div>
+
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:#FF3366;color:#fff">F</div>
+            <div class="integration-info">
+              <h4>Framer</h4>
+              <p>Publish to your Framer CMS collections</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot disconnected"></div>
+              <span style="color:var(--text-muted)">Not connected</span>
+            </div>
+            <button class="btn btn-primary btn-sm">Connect</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Never synced</div>
+        </div>
+
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-logo" style="background:#333;color:#fff">{}</div>
+            <div class="integration-info">
+              <h4>API Webhook</h4>
+              <p>Send content to any external system via webhook</p>
+            </div>
+          </div>
+          <div class="integration-footer">
+            <div class="integration-status">
+              <div class="status-dot connected"></div>
+              <span style="color:var(--green)">Active</span>
+            </div>
+            <button class="btn btn-secondary btn-sm">Configure</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Last webhook: 5 minutes ago</div>
+        </div>
+      </div>
+
+      <!-- API Key section -->
+      <div class="card" style="margin-top:32px">
+        <div class="card-header">
+          <h3>API Access</h3>
+          <button class="btn btn-secondary btn-sm">Generate New Key</button>
+        </div>
+        <div class="card-body">
+          <div class="input-group">
+            <label>API Key</label>
+            <div style="display:flex;gap:8px">
+              <input class="input" type="password" value="sk-dist-ab12cd34ef56gh78ij90kl12mn34op56qr78st90" readonly style="background:var(--bg)">
+              <button class="btn btn-secondary btn-sm">Copy</button>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px">
+            Use this key to access the Distribb API. <a href="#" style="color:var(--accent)">View documentation</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== ANALYTICS ==================== -->
+  <div class="page" id="page-analytics">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Analytics</h1>
+          <p>Track your SEO performance and content impact.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary btn-sm">Last 90 days</button>
+          <button class="btn btn-secondary btn-sm">Export Report</button>
+        </div>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <!-- SEO Chart -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header">
+          <h3>SEO Performance</h3>
+          <div style="display:flex;gap:16px;font-size:12px">
+            <span style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;background:var(--accent);border-radius:50%"></div>Organic Traffic</span>
+            <span style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;background:var(--blue);border-radius:50%"></div>Ranking Keywords</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <svg class="chart-svg" viewBox="0 0 800 200">
+              <!-- Grid lines -->
+              <defs>
+                <pattern id="grid" width="80" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 80 0 L 0 0 0 40" fill="none" stroke="var(--border)" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)"/>
+              
+              <!-- Traffic line -->
+              <polyline points="40,160 120,150 200,140 280,130 360,115 440,100 520,85 600,75 680,60 760,50" 
+                fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+              
+              <!-- Keywords line -->
+              <polyline points="40,180 120,170 200,165 280,155 360,145 440,135 520,125 600,115 680,105 760,95" 
+                fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"/>
+              
+              <!-- Data points -->
+              <circle cx="760" cy="50" r="4" fill="var(--accent)"/>
+              <circle cx="760" cy="95" r="4" fill="var(--blue)"/>
+            </svg>
+          </div>
+          <div class="chart-labels">
+            <span>Jan 1</span><span>Feb 1</span><span>Mar 1</span><span>Apr 1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2 gap-24">
+        <div>
+          <!-- Top articles -->
+          <div class="card" style="margin-bottom:24px">
+            <div class="card-header"><h3>Top Performing Articles</h3></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Article</th><th>Traffic</th><th>Keywords</th><th>CTR</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:500">OpenClaw vs Lindy AI</td>
+                    <td>2,847</td>
+                    <td style="color:var(--green);font-weight:600">23</td>
+                    <td>12.4%</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">Top 10 SEO Tools for Founders</td>
+                    <td>1,923</td>
+                    <td style="color:var(--green);font-weight:600">18</td>
+                    <td>8.7%</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">How to Get Backlinks Without Outreach</td>
+                    <td>1,456</td>
+                    <td style="color:var(--green);font-weight:600">15</td>
+                    <td>9.2%</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">Distribb vs Surfer SEO</td>
+                    <td>1,234</td>
+                    <td style="color:var(--green);font-weight:600">12</td>
+                    <td>11.8%</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">Best AI Writing Tools 2026</td>
+                    <td>987</td>
+                    <td style="color:var(--yellow);font-weight:600">8</td>
+                    <td>6.4%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Traffic sources -->
+          <div class="card">
+            <div class="card-header"><h3>Traffic Sources</h3></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;align-items:center;justify-between">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:12px;height:12px;background:var(--green);border-radius:2px"></div>
+                    <span style="font-size:13px;font-weight:500">Organic Search</span>
+                  </div>
+                  <div style="font-size:13px;color:var(--text-secondary)">
+                    <strong style="color:var(--text-primary)">8,247</strong> (67.2%)
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-between">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:12px;height:12px;background:var(--blue);border-radius:2px"></div>
+                    <span style="font-size:13px;font-weight:500">Direct</span>
+                  </div>
+                  <div style="font-size:13px;color:var(--text-secondary)">
+                    <strong style="color:var(--text-primary)">2,134</strong> (17.4%)
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-between">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:12px;height:12px;background:#FF4500;border-radius:2px"></div>
+                    <span style="font-size:13px;font-weight:500">Reddit</span>
+                  </div>
+                  <div style="font-size:13px;color:var(--text-secondary)">
+                    <strong style="color:var(--text-primary)">1,247</strong> (10.2%)
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-between">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:12px;height:12px;background:var(--purple);border-radius:2px"></div>
+                    <span style="font-size:13px;font-weight:500">Social Media</span>
+                  </div>
+                  <div style="font-size:13px;color:var(--text-secondary)">
+                    <strong style="color:var(--text-primary)">623</strong> (5.2%)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Keyword rankings -->
+          <div class="card" style="margin-bottom:24px">
+            <div class="card-header"><h3>Keyword Rankings</h3></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Keyword</th><th>Position</th><th>Change</th><th>Traffic</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:500">openclaw vs lindy</td>
+                    <td style="color:var(--green);font-weight:600">#3</td>
+                    <td style="color:var(--green);font-size:12px">↑ 2</td>
+                    <td>1,247</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">seo tools for founders</td>
+                    <td style="color:var(--green);font-weight:600">#8</td>
+                    <td style="color:var(--green);font-size:12px">↑ 3</td>
+                    <td>823</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">ai writing tools</td>
+                    <td style="color:var(--yellow);font-weight:600">#14</td>
+                    <td style="color:var(--green);font-size:12px">↑ 1</td>
+                    <td>456</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">distribb alternative</td>
+                    <td style="color:var(--green);font-weight:600">#6</td>
+                    <td style="color:var(--text-muted);font-size:12px">→</td>
+                    <td>234</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500">backlink building</td>
+                    <td style="color:var(--yellow);font-weight:600">#23</td>
+                    <td style="color:var(--red);font-size:12px">↓ 2</td>
+                    <td>134</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Backlink growth -->
+          <div class="card">
+            <div class="card-header"><h3>Backlink Growth</h3></div>
+            <div class="card-body">
+              <div style="margin-bottom:16px">
+                <div style="font-size:24px;font-weight:700">128</div>
+                <div style="font-size:12px;color:var(--text-secondary)">Total referring domains</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:between;font-size:12px">
+                  <span style="color:var(--text-secondary)">This month</span>
+                  <span style="color:var(--green);font-weight:600">+23</span>
+                </div>
+                <div style="display:flex;justify-content:between;font-size:12px">
+                  <span style="color:var(--text-secondary)">Last month</span>
+                  <span style="color:var(--green);font-weight:600">+15</span>
+                </div>
+                <div style="display:flex;justify-content:between;font-size:12px">
+                  <span style="color:var(--text-secondary)">2 months ago</span>
+                  <span style="color:var(--green);font-weight:600">+12</span>
+                </div>
+              </div>
+              <div style="margin-top:16px">
+                <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">Domain Rating Distribution</div>
+                <div style="display:flex;gap:12px;font-size:11px">
+                  <span>DR 70+: <strong>8</strong></span>
+                  <span>DR 50-70: <strong>23</strong></span>
+                  <span>DR 30-50: <strong>45</strong></span>
+                  <span>DR <30: <strong>52</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== SETTINGS ==================== -->
+  <div class="page" id="page-settings">
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>Settings</h1>
+          <p>Manage your account and publishing preferences.</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-content">
+
+      <div class="grid-2 gap-24">
+        <div>
+          <!-- Account -->
+          <div class="settings-section">
+            <h3>Account</h3>
+            <p>Your personal account information and credentials.</p>
+            <div class="card">
+              <div class="card-body">
+                <div class="input-group">
+                  <label>Email</label>
+                  <input class="input" type="email" value="florian@openclawlab.xyz">
+                </div>
+                <div class="input-group">
+                  <label>Password</label>
+                  <input class="input" type="password" value="••••••••••••">
+                </div>
+                <div class="input-group">
+                  <label>API Key</label>
+                  <input class="input" type="password" value="sk-dist-ab12cd34ef56gh78ij90kl12mn34op56qr78st90" readonly style="background:var(--bg)">
+                </div>
+                <button class="btn btn-primary btn-sm">Save Changes</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Publishing preferences -->
+          <div class="settings-section">
+            <h3>Publishing</h3>
+            <p>Default settings for content generation and publishing.</p>
+            <div class="card">
+              <div class="card-body">
+                <div class="input-group">
+                  <label>Default Publishing Mode</label>
+                  <select>
+                    <option>Auto-publish to WordPress</option>
+                    <option>Save as draft</option>
+                    <option>Review before publish</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label>Brand Voice</label>
+                  <select>
+                    <option>Professional & direct</option>
+                    <option>Casual & conversational</option>
+                    <option>Technical & detailed</option>
+                    <option>Friendly & approachable</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label>Target Audience</label>
+                  <input class="input" type="text" value="Bootstrapped SaaS founders, indie hackers, technical entrepreneurs">
+                </div>
+                <div class="input-group">
+                  <label>Default Article Length</label>
+                  <select>
+                    <option>2,500-3,500 words (Comprehensive)</option>
+                    <option>1,500-2,500 words (Standard)</option>
+                    <option>800-1,500 words (Concise)</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary btn-sm">Save Preferences</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Plan & Billing -->
+          <div class="settings-section">
+            <div class="plan-card">
+              <h4>Growth Plan</h4>
+              <p>Perfect for scaling content operations</p>
+              <div class="plan-usage">
+                <div class="plan-usage-item">
+                  <strong>47/100</strong>
+                  <span>Articles this month</span>
+                </div>
+                <div class="plan-usage-item">
+                  <strong>Unlimited</strong>
+                  <span>Backlink exchanges</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card">
+              <div class="card-body">
+                <div class="settings-row">
+                  <div>
+                    <div class="settings-label">Current Plan</div>
+                    <div class="settings-value">Growth Plan ($97/month)</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm">Upgrade</button>
+                </div>
+                <div class="settings-row">
+                  <div>
+                    <div class="settings-label">Next billing date</div>
+                    <div class="settings-value">April 15, 2026</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm">View invoices</button>
+                </div>
+                <div class="settings-row">
+                  <div>
+                    <div class="settings-label">Payment method</div>
+                    <div class="settings-value">•••• •••• •••• 4242</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm">Update</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team -->
+          <div class="settings-section">
+            <h3>Team</h3>
+            <p>Invite team members and manage permissions.</p>
+            <div class="card">
+              <div class="card-body">
+                <div style="margin-bottom:16px">
+                  <div style="display:flex;gap:8px">
+                    <input class="input" type="email" placeholder="email@example.com" style="flex:1">
+                    <select style="width:120px">
+                      <option>Editor</option>
+                      <option>Viewer</option>
+                      <option>Admin</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm">Invite</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="team-member">
+                    <div class="avatar">FD</div>
+                    <div class="team-member-info">
+                      <div class="name">Florian Darroman</div>
+                      <div class="email">florian@openclawlab.xyz</div>
+                    </div>
+                    <span class="badge badge-purple">Owner</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Modals -->
+
+<!-- Create Article Modal -->
+<div class="modal-overlay" id="create-article-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Create New Article</h2>
+      <button class="modal-close" onclick="hideModal('create-article-modal')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label>Target Keyword</label>
+        <input class="input" type="text" placeholder="e.g., best ai seo tools">
+      </div>
+      <div class="input-group">
+        <label>Tone & Style</label>
+        <select>
+          <option>Professional & direct</option>
+          <option>Casual & conversational</option>
+          <option>Technical & detailed</option>
+          <option>Friendly & approachable</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Article Length</label>
+        <select>
+          <option>2,500-3,500 words (Comprehensive)</option>
+          <option>1,500-2,500 words (Standard)</option>
+          <option>800-1,500 words (Concise)</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Target URL (optional)</label>
+        <input class="input" type="text" placeholder="e.g., /best-ai-seo-tools-2026">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="hideModal('create-article-modal')">Cancel</button>
+      <button class="btn btn-primary">Generate Article</button>
+    </div>
+  </div>
+</div>
+
+<!-- Article Detail Modal -->
+<div class="modal-overlay" id="article-detail-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>OpenClaw vs Lindy AI: Complete Comparison</h2>
+      <button class="modal-close" onclick="hideModal('article-detail-modal')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2" style="margin-bottom:20px">
+        <div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Target Keyword</div>
+          <div style="font-weight:500">openclaw vs lindy</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Status</div>
+          <span class="badge badge-green">Published</span>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Word Count</div>
+          <div style="font-weight:500">3,450 words</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">SEO Score</div>
+          <div style="font-weight:600;color:var(--green)">91/100</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Published</div>
+          <div style="font-weight:500">March 28, 2026</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">URL</div>
+          <a href="#" style="font-weight:500;color:var(--accent)">/openclaw-vs-lindy-ai</a>
+        </div>
+      </div>
+      <div style="margin-bottom:20px">
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">Performance (Last 30 days)</div>
+        <div class="grid-2">
+          <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm)">
+            <div style="font-size:20px;font-weight:700">2,847</div>
+            <div style="font-size:11px;color:var(--text-muted)">Page views</div>
+          </div>
+          <div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--radius-sm)">
+            <div style="font-size:20px;font-weight:700">23</div>
+            <div style="font-size:11px;color:var(--text-muted)">Ranking keywords</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary">Edit</button>
+      <button class="btn btn-secondary">View Live</button>
+      <button class="btn btn-primary">Repurpose</button>
+    </div>
+  </div>
+</div>
+
+<!-- Find Partners Modal -->
+<div class="modal-overlay" id="find-partners-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Find Backlink Partners</h2>
+      <button class="modal-close" onclick="hideModal('find-partners-modal')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label>Your article to link from</label>
+        <select>
+          <option>OpenClaw vs Lindy AI: Complete Comparison</option>
+          <option>Top 10 SEO Tools for Founders</option>
+          <option>Best AI Writing Tools 2026</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Topic/Industry</label>
+        <select>
+          <option>AI & SaaS Tools</option>
+          <option>SEO & Marketing</option>
+          <option>Startup & Entrepreneurship</option>
+          <option>Productivity Tools</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Minimum Domain Rating</label>
+        <select>
+          <option>DR 30+</option>
+          <option>DR 40+</option>
+          <option>DR 50+</option>
+          <option>DR 60+</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="hideModal('find-partners-modal')">Cancel</button>
+      <button class="btn btn-primary">Find Partners</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Navigation
+function navigate(page) {
+  // Update active nav item
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  document.querySelector(`[href="#${page}"]`).classList.add('active');
+  
+  // Show page
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+  
+  // Close mobile sidebar
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.querySelector('.overlay').style.display = 'none';
+  }
+}
+
+// Mobile sidebar
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.querySelector('.overlay');
+  sidebar.classList.toggle('open');
+  overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+}
+
+// Modals
+function showModal(id) {
+  document.getElementById(id).classList.add('show');
+}
+
+function hideModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('show');
+    }
+  });
+});
+
+// Tabs
+function switchTab(button, contentId) {
+  // Update active tab
+  button.parentNode.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  button.classList.add('active');
+  
+  // Show content
+  const parent = button.closest('.page');
+  parent.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+  parent.querySelector(`#${contentId}`).style.display = 'block';
+}
+
+// Article filters
+function filterArticles(chip, status) {
+  // Update active filter
+  chip.parentNode.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  
+  // Filter table rows
+  const rows = document.querySelectorAll('.article-row');
+  rows.forEach(row => {
+    if (status === 'all' || row.dataset.status === status) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+// Platform selection
+function selectPlatform(icon) {
+  icon.parentNode.querySelectorAll('.platform-icon').forEach(p => p.classList.remove('active'));
+  icon.classList.add('active');
+}
+
+// Onboarding checklist
+document.querySelectorAll('.checklist-item').forEach(item => {
+  item.addEventListener('click', () => {
+    if (!item.classList.contains('done')) {
+      item.classList.add('done');
+      
+      // Update progress
+      const total = document.querySelectorAll('.checklist-item').length;
+      const completed = document.querySelectorAll('.checklist-item.done').length;
+      const progress = (completed / total) * 100;
+      
+      document.querySelector('.progress-fill').style.width = `${progress}%`;
+      document.querySelector('.onboarding-progress').textContent = `${completed} of ${total} complete`;
+      
+      // Hide onboarding if all complete
+      if (completed === total) {
+        setTimeout(() => {
+          document.getElementById('onboarding').style.display = 'none';
+        }, 1000);
+      }
+    }
+  });
+});
+
+// Handle URL navigation
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash.slice(1);
+  if (hash && document.getElementById(`page-${hash}`)) {
+    navigate(hash);
+  }
+});
+
+// Initialize
+if (window.location.hash) {
+  const hash = window.location.hash.slice(1);
+  if (document.getElementById(`page-${hash}`)) {
+    navigate(hash);
+  }
+}
+
+// Responsive sidebar
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.querySelector('.overlay').style.display = 'none';
+  }
+});
+</script>
+
+</body>
+</html>
