@@ -305,6 +305,54 @@ textarea { resize: vertical; min-height: 80px; }
 .pipeline-card-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
 .pipeline-card-meta { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
 
+/* Forecasting */
+.forecast-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+  transition: all var(--transition);
+}
+.forecast-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.forecast-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; margin-bottom: 12px;
+}
+.forecast-content { }
+.forecast-title {
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+}
+.forecast-value {
+  font-size: 20px; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 2px;
+}
+.forecast-range {
+  font-size: 12px; color: var(--text-muted); margin-bottom: 6px;
+}
+.forecast-detail {
+  font-size: 11px; color: var(--text-muted); line-height: 1.4;
+}
+
+/* Ranking Predictions */
+.ranking-predictions { }
+.prediction-item {
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px;
+  align-items: center;
+}
+.prediction-item:last-child { border-bottom: none; }
+.prediction-kw {
+  font-size: 13px; font-weight: 500; color: var(--text-primary);
+}
+.prediction-meta {
+  font-size: 11px; color: var(--text-muted);
+  display: flex; gap: 8px; align-items: center;
+}
+.prediction-timeline {
+  font-size: 12px; color: var(--text-secondary); font-weight: 500;
+  text-align: right;
+}
+
 /* Activity feed */
 .activity-item {
   display: flex; gap: 12px; padding: 12px 0;
@@ -807,6 +855,91 @@ textarea { resize: vertical; min-height: 80px; }
           <div class="metric-change up">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
             +5 pts from last month
+          </div>
+        </div>
+      </div>
+
+      <!-- Forecasting -->
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header">
+          <h3>🔮 Growth Projections</h3>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px">
+              <option>30 days</option>
+              <option>90 days</option>
+              <option>1 year</option>
+            </select>
+            <span style="font-size:11px;color:var(--text-muted)">Based on current DR, KW volume & difficulty</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="grid-3">
+            <!-- Traffic Forecast -->
+            <div class="forecast-card">
+              <div class="forecast-icon" style="background:var(--blue-light)">📈</div>
+              <div class="forecast-content">
+                <div class="forecast-title">Traffic Growth</div>
+                <div class="forecast-value">+4,200 visits</div>
+                <div class="forecast-range">2,800–4,200 monthly</div>
+                <div class="forecast-detail">67K KW volume × DR 29 = 85% ranking probability</div>
+              </div>
+            </div>
+            
+            <!-- Revenue Forecast -->
+            <div class="forecast-card">
+              <div class="forecast-icon" style="background:var(--green-light)">💰</div>
+              <div class="forecast-content">
+                <div class="forecast-title">Revenue Impact</div>
+                <div class="forecast-value">+$5,100 MRR</div>
+                <div class="forecast-range">$3,400–$5,100</div>
+                <div class="forecast-detail">4,200 visits × 2.3% trial conversion × $97 avg</div>
+              </div>
+            </div>
+            
+            <!-- Domain Authority -->
+            <div class="forecast-card">
+              <div class="forecast-icon" style="background:var(--purple-light)">⚡</div>
+              <div class="forecast-content">
+                <div class="forecast-title">Domain Rating</div>
+                <div class="forecast-value">DR 32–35</div>
+                <div class="forecast-range">Current: 29</div>
+                <div class="forecast-detail">18 backlinks/month pace = +3-6 DR points</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Key Ranking Predictions -->
+          <div style="margin-top:20px">
+            <h4 style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text-secondary)">🎯 Next Articles to Rank</h4>
+            <div class="ranking-predictions">
+              <div class="prediction-item">
+                <div class="prediction-kw">"AI SEO software"</div>
+                <div class="prediction-meta">
+                  <span>8.1K vol</span>
+                  <span>KD 15</span>
+                  <span style="color:var(--green);font-weight:600">85% chance</span>
+                </div>
+                <div class="prediction-timeline">Page 1 in 45 days</div>
+              </div>
+              <div class="prediction-item">
+                <div class="prediction-kw">"Best SEO automation tools"</div>
+                <div class="prediction-meta">
+                  <span>6.6K vol</span>
+                  <span>KD 18</span>
+                  <span style="color:var(--green);font-weight:600">78% chance</span>
+                </div>
+                <div class="prediction-timeline">Page 1 in 52 days</div>
+              </div>
+              <div class="prediction-item">
+                <div class="prediction-kw">"Distribb alternative"</div>
+                <div class="prediction-meta">
+                  <span>1.9K vol</span>
+                  <span>KD 12</span>
+                  <span style="color:var(--green);font-weight:600">92% chance</span>
+                </div>
+                <div class="prediction-timeline">Page 1 in 28 days</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
