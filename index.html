@@ -2333,7 +2333,9 @@ textarea { resize: vertical; min-height: 80px; }
 
       <!-- ========== TAB 5: YOUR CLUSTER ========== -->
       <div class="tab-content" id="bl-cluster" style="display:none">
-        <div class="card">
+
+        <!-- Current cluster -->
+        <div class="card" style="margin-bottom:20px">
           <div class="card-header"><h3>Your Niche Cluster</h3><span class="badge badge-blue" style="font-size:11px">SaaS / AI Tools / US + Global / DR 20-45</span></div>
           <div class="card-body">
             <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Links only flow within your cluster for maximum topical relevance. All sites are auto-vetted: real organic traffic, clean backlink history, no spam.</p>
@@ -2358,14 +2360,14 @@ textarea { resize: vertical; min-height: 80px; }
               </div>
             </div>
 
-            <!-- Sample cluster members -->
-            <div style="font-size:13px;font-weight:600;margin-bottom:12px">Sample sites in your cluster</div>
+            <!-- Anonymized cluster members -->
+            <div style="font-size:13px;font-weight:600;margin-bottom:12px">Sites in your cluster</div>
             <div class="table-wrap">
               <table>
                 <thead><tr><th>Site</th><th>DR</th><th>Monthly Traffic</th><th>Niche</th><th>Country</th><th>Status</th></tr></thead>
                 <tbody>
                   <tr>
-                    <td style="font-weight:500;color:var(--blue)">saasweekly.com</td>
+                    <td style="font-weight:500;color:var(--text-primary)"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:20px;height:20px;border-radius:4px;background:var(--blue-light);display:inline-flex;align-items:center;justify-content:center;font-size:10px">🔵</span> SaaS Blog #1</span></td>
                     <td>42</td>
                     <td>3,200</td>
                     <td style="font-size:12px">SaaS News</td>
@@ -2373,7 +2375,7 @@ textarea { resize: vertical; min-height: 80px; }
                     <td><span class="badge badge-green">Active</span></td>
                   </tr>
                   <tr>
-                    <td style="font-weight:500;color:var(--blue)">startupresources.io</td>
+                    <td style="font-weight:500;color:var(--text-primary)"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:20px;height:20px;border-radius:4px;background:var(--purple-light);display:inline-flex;align-items:center;justify-content:center;font-size:10px">🟣</span> Startup Hub #2</span></td>
                     <td>38</td>
                     <td>2,800</td>
                     <td style="font-size:12px">Startup Tools</td>
@@ -2381,7 +2383,7 @@ textarea { resize: vertical; min-height: 80px; }
                     <td><span class="badge badge-green">Active</span></td>
                   </tr>
                   <tr>
-                    <td style="font-weight:500;color:var(--blue)">foundersblog.co</td>
+                    <td style="font-weight:500;color:var(--text-primary)"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:20px;height:20px;border-radius:4px;background:var(--green-light);display:inline-flex;align-items:center;justify-content:center;font-size:10px">🟢</span> Bootstrap Blog #3</span></td>
                     <td>35</td>
                     <td>1,900</td>
                     <td style="font-size:12px">Bootstrapping</td>
@@ -2389,7 +2391,7 @@ textarea { resize: vertical; min-height: 80px; }
                     <td><span class="badge badge-green">Active</span></td>
                   </tr>
                   <tr>
-                    <td style="font-weight:500;color:var(--blue)">aitoolhunt.com</td>
+                    <td style="font-weight:500;color:var(--text-primary)"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:20px;height:20px;border-radius:4px;background:var(--accent-light);display:inline-flex;align-items:center;justify-content:center;font-size:10px">🟠</span> AI Directory #4</span></td>
                     <td>44</td>
                     <td>4,100</td>
                     <td style="font-size:12px">AI Tools</td>
@@ -2397,19 +2399,116 @@ textarea { resize: vertical; min-height: 80px; }
                     <td><span class="badge badge-green">Active</span></td>
                   </tr>
                   <tr>
-                    <td style="font-weight:500;color:var(--blue)">growthhackers.com</td>
+                    <td style="font-weight:500;color:var(--text-primary)"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:20px;height:20px;border-radius:4px;background:var(--yellow-light);display:inline-flex;align-items:center;justify-content:center;font-size:10px">🟡</span> Growth Site #5</span></td>
                     <td>41</td>
                     <td>5,600</td>
                     <td style="font-size:12px">Growth Marketing</td>
                     <td style="font-size:12px">US</td>
                     <td><span class="badge badge-green">Active</span></td>
                   </tr>
+                  <tr>
+                    <td colspan="6" style="text-align:center;color:var(--text-muted);font-size:12px;padding:12px">+ 42 more sites in this cluster</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
 
             <div style="margin-top:16px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:12px;color:var(--text-secondary)">
-              🔒 Full site list hidden to protect the network. Distribb handles all matching and publishing automatically.
+              🔒 Site names and URLs are hidden to protect the network. You see DR, traffic, and niche. Distribb handles all matching automatically.
+            </div>
+          </div>
+        </div>
+
+        <!-- Request cluster change -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Request Cluster Change</h3>
+            <span style="font-size:12px;color:var(--text-muted)">Manually reviewed by our team</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Your cluster is auto-assigned based on your GSC data. If you think a different cluster is a better fit, submit a request below. Our team reviews every request manually to ensure quality stays high.</p>
+
+            <!-- Current cluster display -->
+            <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--blue-light);border-radius:var(--radius-sm);border:1px solid var(--blue);margin-bottom:20px">
+              <span style="font-size:20px">📍</span>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600;color:var(--blue)">Current Cluster</div>
+                <div style="font-size:14px;font-weight:500;margin-top:2px">SaaS / AI Tools / US + Global / DR 20-45</div>
+              </div>
+              <span class="badge badge-green">Active</span>
+            </div>
+
+            <!-- Request form -->
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div>
+                <label style="font-size:13px;font-weight:500;display:block;margin-bottom:6px">Preferred Cluster</label>
+                <select style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;background:var(--surface);color:var(--text-primary);cursor:pointer">
+                  <option value="">Select a cluster...</option>
+                  <optgroup label="Technology">
+                    <option>SaaS / AI Tools / US + Global / DR 20-45</option>
+                    <option>SaaS / Developer Tools / US / DR 15-35</option>
+                    <option>SaaS / Marketing Tools / US + EU / DR 25-50</option>
+                    <option>SaaS / Productivity / Global / DR 20-40</option>
+                  </optgroup>
+                  <optgroup label="E-commerce">
+                    <option>E-commerce / Shopify / US + EU / DR 15-35</option>
+                    <option>E-commerce / DTC Brands / US / DR 20-45</option>
+                    <option>E-commerce / Dropshipping / Global / DR 10-30</option>
+                  </optgroup>
+                  <optgroup label="Marketing & SEO">
+                    <option>Marketing / Content Marketing / US + EU / DR 25-50</option>
+                    <option>Marketing / SEO Agencies / US / DR 30-55</option>
+                    <option>Marketing / Social Media / Global / DR 20-40</option>
+                  </optgroup>
+                  <optgroup label="Finance & Business">
+                    <option>Finance / Fintech / US + EU / DR 20-45</option>
+                    <option>Business / Small Business / US / DR 15-35</option>
+                    <option>Business / Consulting / Global / DR 20-40</option>
+                  </optgroup>
+                  <optgroup label="Health & Lifestyle">
+                    <option>Health / Fitness / US + EU / DR 15-35</option>
+                    <option>Health / Wellness / Global / DR 10-30</option>
+                  </optgroup>
+                  <optgroup label="Regional (French)">
+                    <option>SaaS / Outils IA / France / DR 15-35</option>
+                    <option>E-commerce / France / DR 10-30</option>
+                    <option>Marketing / Agences SEO / France / DR 20-40</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:13px;font-weight:500;display:block;margin-bottom:6px">Why does this cluster fit better?</label>
+                <textarea style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;min-height:80px;resize:vertical;background:var(--surface);color:var(--text-primary)" placeholder="e.g., Our content focuses more on e-commerce SEO than general SaaS. Most of our keywords are in the Shopify niche."></textarea>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <button class="btn btn-primary" onclick="alert('Request submitted! Our team will review within 24-48 hours.')">Submit Request</button>
+                <span style="font-size:12px;color:var(--text-muted)">Reviewed within 24-48 hours</span>
+              </div>
+            </div>
+
+            <!-- Pending request example (hidden by default, shown when request exists) -->
+            <div style="margin-top:20px;display:none" id="pending-cluster-request">
+              <div style="padding:14px 16px;background:var(--yellow-light);border-radius:var(--radius-sm);border:1px solid var(--yellow)">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                  <span class="badge badge-yellow">Pending Review</span>
+                  <span style="font-size:12px;color:var(--text-muted)">Submitted Apr 2, 2026</span>
+                </div>
+                <div style="font-size:13px">Requested move to: <strong>E-commerce / Shopify / US + EU / DR 15-35</strong></div>
+              </div>
+            </div>
+
+            <!-- Past requests -->
+            <div style="margin-top:20px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:12px">Request History</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+                  <span class="badge badge-green">Approved</span>
+                  <div style="flex:1;font-size:13px">
+                    Moved from <span style="color:var(--text-muted)">General Tech / Global</span> → <strong>SaaS / AI Tools / US + Global / DR 20-45</strong>
+                  </div>
+                  <span style="font-size:12px;color:var(--text-muted)">Jan 15, 2026</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
