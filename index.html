@@ -1709,35 +1709,23 @@ textarea { resize: vertical; min-height: 80px; }
       <div class="page-header-row">
         <div>
           <h1>Backlinks Exchange</h1>
-          <p>Earn credits by linking out, spend them to get links back.</p>
+          <p>Fully automated. ABC cycles. Niche-clustered. Zero manual work.</p>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="showModal('find-partners-modal')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          Find Partners
-        </button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-size:12px;color:var(--text-muted);background:var(--bg);padding:4px 10px;border-radius:20px;border:1px solid var(--border)">Member since Jan 3, 2026</span>
+          <span style="font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-light);padding:4px 10px;border-radius:20px">Month 3 — Pro Tier</span>
+        </div>
       </div>
     </div>
     <div class="page-content">
 
-      <!-- Stats -->
-      <div class="metrics-grid">
+      <!-- Top metrics row -->
+      <div class="metrics-grid" style="grid-template-columns:repeat(5,1fr)">
         <div class="metric-card">
           <div class="metric-icon" style="background:var(--blue-light)">🔗</div>
-          <div class="metric-value">128</div>
-          <div class="metric-label">Total Backlinks</div>
-          <div class="metric-change up">+23 this month</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-icon" style="background:var(--green-light)">💰</div>
-          <div class="metric-value">342</div>
-          <div class="metric-label">Credits Earned</div>
-          <div class="metric-change up">+58 this month</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-icon" style="background:var(--accent-light)">🔥</div>
-          <div class="metric-value">215</div>
-          <div class="metric-label">Credits Spent</div>
-          <div class="metric-change" style="color:var(--text-muted)">127 remaining</div>
+          <div class="metric-value">47</div>
+          <div class="metric-label">Links Earned</div>
+          <div class="metric-change up">+8 this month</div>
         </div>
         <div class="metric-card">
           <div class="metric-icon" style="background:var(--purple-light)">📈</div>
@@ -1745,146 +1733,684 @@ textarea { resize: vertical; min-height: 80px; }
           <div class="metric-label">Domain Rating</div>
           <div class="metric-change up">+6 from start</div>
         </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--green-light)">🚀</div>
+          <div class="metric-value">8/mo</div>
+          <div class="metric-label">Link Velocity</div>
+          <div class="metric-change up">Unlocked at month 3</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--accent-light)">🎯</div>
+          <div class="metric-value">DR 40</div>
+          <div class="metric-label">Max Tier Access</div>
+          <div class="metric-change" style="color:var(--accent)">DR 60 at month 5</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--yellow-light)">🏆</div>
+          <div class="metric-value">38%</div>
+          <div class="metric-label">Gap Closed</div>
+          <div class="metric-change up">+11% this month</div>
+        </div>
       </div>
 
+      <!-- Tabs -->
       <div class="tabs" id="backlink-tabs">
-        <button class="tab active" onclick="switchTab(this,'bl-your')">Your Links (outgoing)</button>
-        <button class="tab" onclick="switchTab(this,'bl-incoming')">Links to You (incoming)</button>
-        <button class="tab" onclick="switchTab(this,'bl-credits')">Credit History</button>
+        <button class="tab active" onclick="switchTab(this,'bl-gap')">Competitor Gap</button>
+        <button class="tab" onclick="switchTab(this,'bl-links')">Link Activity</button>
+        <button class="tab" onclick="switchTab(this,'bl-strategy')">Link Strategy</button>
+        <button class="tab" onclick="switchTab(this,'bl-progress')">Progress & Rewards</button>
+        <button class="tab" onclick="switchTab(this,'bl-cluster')">Your Cluster</button>
       </div>
 
-      <!-- Your links -->
-      <div class="tab-content active" id="bl-your">
-        <div class="card">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>Your Article</th><th>Links To</th><th>Partner DR</th><th>Credits</th><th>Status</th><th>Date</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="font-weight:500">Top 10 SEO Tools for Founders</td>
-                  <td style="color:var(--blue)">writesonic.com</td>
-                  <td>62</td>
-                  <td style="color:var(--green);font-weight:600">+3</td>
-                  <td><span class="badge badge-green">Live</span></td>
-                  <td style="color:var(--text-muted)">Mar 25</td>
-                </tr>
-                <tr>
-                  <td style="font-weight:500">Best AI Writing Tools 2026</td>
-                  <td style="color:var(--blue)">jasper.ai</td>
-                  <td>71</td>
-                  <td style="color:var(--green);font-weight:600">+4</td>
-                  <td><span class="badge badge-green">Live</span></td>
-                  <td style="color:var(--text-muted)">Mar 23</td>
-                </tr>
-                <tr>
-                  <td style="font-weight:500">OpenClaw vs Lindy AI</td>
-                  <td style="color:var(--blue)">toolify.ai</td>
-                  <td>48</td>
-                  <td style="color:var(--green);font-weight:600">+2</td>
-                  <td><span class="badge badge-yellow">Pending</span></td>
-                  <td style="color:var(--text-muted)">Mar 28</td>
-                </tr>
-                <tr>
-                  <td style="font-weight:500">SaaS Content Marketing Guide</td>
-                  <td style="color:var(--blue)">contentatscale.ai</td>
-                  <td>55</td>
-                  <td style="color:var(--green);font-weight:600">+3</td>
-                  <td><span class="badge badge-green">Live</span></td>
-                  <td style="color:var(--text-muted)">Mar 20</td>
-                </tr>
-                <tr>
-                  <td style="font-weight:500">How to Get Backlinks Without Outreach</td>
-                  <td style="color:var(--blue)">ahrefs.com/blog</td>
-                  <td>92</td>
-                  <td style="color:var(--green);font-weight:600">+5</td>
-                  <td><span class="badge badge-green">Live</span></td>
-                  <td style="color:var(--text-muted)">Mar 18</td>
-                </tr>
-              </tbody>
-            </table>
+      <!-- ========== TAB 1: COMPETITOR GAP ========== -->
+      <div class="tab-content active" id="bl-gap">
+
+        <!-- Gap Overview -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header">
+            <h3>Backlink Gap vs Top Competitors</h3>
+            <span class="badge badge-gray">Auto-detected from GSC</span>
           </div>
-        </div>
-      </div>
-
-      <!-- Incoming links -->
-      <div class="tab-content" id="bl-incoming" style="display:none">
-        <div class="card">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>From</th><th>To (your article)</th><th>Partner DR</th><th>Credits</th><th>Status</th><th>Date</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="color:var(--blue)">saasweekly.com</td>
-                  <td style="font-weight:500">Top 10 SEO Tools for Founders</td>
-                  <td>52</td>
-                  <td style="color:var(--red);font-weight:600">-3</td>
-                  <td><span class="badge badge-green">Live</span></td>
-                  <td style="color:var(--text-muted)">Mar 26</td>
-                </tr>
-                <tr>
-                  <td style="color:var(--blue)">startupresources.io</td>
-                  <td style="font-weight:500">OpenClaw vs Lindy AI</td>
-                  <td>44</td>
-                  <td style="color:var(--red);font-weight:600">-2</td>
-                  <td><span class="badge badge-green">Live</span></td>
-                  <td style="color:var(--text-muted)">Mar 24</td>
-                </tr>
-                <tr>
-                  <td style="color:var(--blue)">foundersblog.co</td>
-                  <td style="font-weight:500">How to Get Backlinks Without Outreach</td>
-                  <td>38</td>
-                  <td style="color:var(--red);font-weight:600">-2</td>
-                  <td><span class="badge badge-yellow">Pending</span></td>
-                  <td style="color:var(--text-muted)">Mar 29</td>
-                </tr>
-                <tr>
-                  <td style="color:var(--blue)">growthhackers.com</td>
-                  <td style="font-weight:500">Distribb vs Surfer SEO</td>
-                  <td>68</td>
-                  <td style="color:var(--red);font-weight:600">-4</td>
-                  <td><span class="badge badge-green">Live</span></td>
-                  <td style="color:var(--text-muted)">Mar 22</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Credit history -->
-      <div class="tab-content" id="bl-credits" style="display:none">
-        <div class="card">
           <div class="card-body">
-            <div style="display:flex;align-items:center;gap:24px;margin-bottom:24px;padding:20px;background:var(--bg);border-radius:var(--radius)">
-              <div>
-                <div class="credit-label">Available Balance</div>
-                <div class="credit-display" style="color:var(--accent)">127 <span style="font-size:14px;font-weight:500;color:var(--text-muted)">credits</span></div>
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Distribb auto-found your top 5 SERP competitors based on your GSC keywords. Here's where you stand.</p>
+
+            <!-- Your site -->
+            <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--accent-light);border-radius:var(--radius-sm);margin-bottom:16px;border:1px solid var(--accent)" >
+              <div style="width:40px;height:40px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px">🏠</div>
+              <div style="flex:1">
+                <div style="font-weight:600;font-size:14px">openclawlab.xyz <span style="font-weight:400;color:var(--text-secondary);font-size:12px">(you)</span></div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">SaaS / AI Tools / US + Global</div>
               </div>
-              <div style="width:1px;height:40px;background:var(--border)"></div>
-              <div>
-                <div class="credit-label">Earned (all time)</div>
-                <div style="font-size:20px;font-weight:700;color:var(--green)">342</div>
+              <div style="text-align:center;padding:0 16px">
+                <div style="font-size:22px;font-weight:700;color:var(--accent)">DR 34</div>
+                <div style="font-size:11px;color:var(--text-muted)">Domain Rating</div>
               </div>
-              <div style="width:1px;height:40px;background:var(--border)"></div>
-              <div>
-                <div class="credit-label">Spent (all time)</div>
-                <div style="font-size:20px;font-weight:700;color:var(--text-secondary)">215</div>
+              <div style="text-align:center;padding:0 16px">
+                <div style="font-size:22px;font-weight:700">89</div>
+                <div style="font-size:11px;color:var(--text-muted)">Ref. Domains</div>
+              </div>
+              <div style="text-align:center;padding:0 16px">
+                <div style="font-size:22px;font-weight:700">47</div>
+                <div style="font-size:11px;color:var(--text-muted)">From Exchange</div>
               </div>
             </div>
+
+            <!-- Competitors -->
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <!-- Comp 1 -->
+              <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--red)"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:500;font-size:13px">outrank.so</div>
+                </div>
+                <div style="text-align:center;width:80px">
+                  <div style="font-weight:700;color:var(--text-primary)">DR 71</div>
+                </div>
+                <div style="text-align:center;width:100px">
+                  <div style="font-weight:600">1,842</div>
+                  <div style="font-size:10px;color:var(--text-muted)">ref. domains</div>
+                </div>
+                <div style="width:200px">
+                  <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                    <span style="color:var(--text-muted)">Gap: 1,753 domains</span>
+                    <span style="font-weight:600;color:var(--red)">5%</span>
+                  </div>
+                  <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                    <div style="width:5%;height:100%;background:var(--red);border-radius:3px"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Comp 2 -->
+              <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--red)"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:500;font-size:13px">babylovegrowth.ai</div>
+                </div>
+                <div style="text-align:center;width:80px">
+                  <div style="font-weight:700;color:var(--text-primary)">DR 54</div>
+                </div>
+                <div style="text-align:center;width:100px">
+                  <div style="font-weight:600">723</div>
+                  <div style="font-size:10px;color:var(--text-muted)">ref. domains</div>
+                </div>
+                <div style="width:200px">
+                  <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                    <span style="color:var(--text-muted)">Gap: 634 domains</span>
+                    <span style="font-weight:600;color:var(--red)">12%</span>
+                  </div>
+                  <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                    <div style="width:12%;height:100%;background:var(--yellow);border-radius:3px"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Comp 3 -->
+              <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--yellow)"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:500;font-size:13px">arvow.com</div>
+                </div>
+                <div style="text-align:center;width:80px">
+                  <div style="font-weight:700;color:var(--text-primary)">DR 48</div>
+                </div>
+                <div style="text-align:center;width:100px">
+                  <div style="font-weight:600">412</div>
+                  <div style="font-size:10px;color:var(--text-muted)">ref. domains</div>
+                </div>
+                <div style="width:200px">
+                  <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                    <span style="color:var(--text-muted)">Gap: 323 domains</span>
+                    <span style="font-weight:600;color:var(--yellow)">22%</span>
+                  </div>
+                  <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                    <div style="width:22%;height:100%;background:var(--yellow);border-radius:3px"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Comp 4 -->
+              <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:500;font-size:13px">rankyak.com</div>
+                </div>
+                <div style="text-align:center;width:80px">
+                  <div style="font-weight:700;color:var(--text-primary)">DR 29</div>
+                </div>
+                <div style="text-align:center;width:100px">
+                  <div style="font-weight:600">67</div>
+                  <div style="font-size:10px;color:var(--text-muted)">ref. domains</div>
+                </div>
+                <div style="width:200px">
+                  <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                    <span style="color:var(--text-muted)">Ahead by 22</span>
+                    <span style="font-weight:600;color:var(--green)">133%</span>
+                  </div>
+                  <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                    <div style="width:100%;height:100%;background:var(--green);border-radius:3px"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Comp 5 -->
+              <div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:500;font-size:13px">surferseo.com</div>
+                </div>
+                <div style="text-align:center;width:80px">
+                  <div style="font-weight:700;color:var(--text-primary)">DR 82</div>
+                </div>
+                <div style="text-align:center;width:100px">
+                  <div style="font-weight:600">4,291</div>
+                  <div style="font-size:10px;color:var(--text-muted)">ref. domains</div>
+                </div>
+                <div style="width:200px">
+                  <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                    <span style="color:var(--text-muted)">Gap: 4,202 domains</span>
+                    <span style="font-weight:600;color:var(--red)">2%</span>
+                  </div>
+                  <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                    <div style="width:2%;height:100%;background:var(--red);border-radius:3px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Projection -->
+            <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,#FFF7ED,#FFF0E9);border-radius:var(--radius-sm);border:1px solid #FFD4B8">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-size:24px">📊</span>
+                <div>
+                  <div style="font-weight:600;font-size:14px;color:var(--text-primary)">At 8 links/month, you'll match arvow.com in ~7 months</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Upgrade velocity to close the gap faster. Your velocity increases automatically as you stay subscribed.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Competitor backlinks you're missing -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Links You're Missing</h3>
+            <span style="font-size:12px;color:var(--text-muted)">Sites linking to competitors but not you. Distribb is targeting these.</span>
+          </div>
+          <div class="table-wrap">
             <table>
-              <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Balance</th></tr></thead>
+              <thead><tr><th>Domain</th><th>DR</th><th>Links to</th><th>Status</th><th>Type</th></tr></thead>
               <tbody>
-                <tr><td style="color:var(--text-muted)">Mar 28</td><td>Link placed in "OpenClaw vs Lindy AI" to toolify.ai</td><td style="color:var(--green);font-weight:600">+2</td><td>127</td></tr>
-                <tr><td style="color:var(--text-muted)">Mar 26</td><td>Incoming link from saasweekly.com</td><td style="color:var(--red);font-weight:600">-3</td><td>125</td></tr>
-                <tr><td style="color:var(--text-muted)">Mar 25</td><td>Link placed in "Top 10 SEO Tools" to writesonic.com</td><td style="color:var(--green);font-weight:600">+3</td><td>128</td></tr>
-                <tr><td style="color:var(--text-muted)">Mar 24</td><td>Incoming link from startupresources.io</td><td style="color:var(--red);font-weight:600">-2</td><td>125</td></tr>
-                <tr><td style="color:var(--text-muted)">Mar 23</td><td>Link placed in "Best AI Writing Tools" to jasper.ai</td><td style="color:var(--green);font-weight:600">+4</td><td>127</td></tr>
+                <tr>
+                  <td style="font-weight:500;color:var(--blue)">hubspot.com/blog</td>
+                  <td>93</td>
+                  <td style="font-size:12px">outrank.so, arvow.com</td>
+                  <td><span class="badge badge-yellow">In Queue</span></td>
+                  <td style="font-size:12px;color:var(--text-muted)">Listicle target</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;color:var(--blue)">searchenginejournal.com</td>
+                  <td>91</td>
+                  <td style="font-size:12px">outrank.so, babylovegrowth.ai</td>
+                  <td><span class="badge badge-yellow">In Queue</span></td>
+                  <td style="font-size:12px;color:var(--text-muted)">Niche edit</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;color:var(--blue)">backlinko.com</td>
+                  <td>88</td>
+                  <td style="font-size:12px">outrank.so, surferseo.com</td>
+                  <td><span class="badge badge-green">Placed</span></td>
+                  <td style="font-size:12px;color:var(--text-muted)">Bridge article</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;color:var(--blue)">neilpatel.com</td>
+                  <td>86</td>
+                  <td style="font-size:12px">surferseo.com, arvow.com</td>
+                  <td><span class="badge badge-gray">Pending match</span></td>
+                  <td style="font-size:12px;color:var(--text-muted)">Listicle target</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;color:var(--blue)">ahrefs.com/blog</td>
+                  <td>92</td>
+                  <td style="font-size:12px">outrank.so, surferseo.com</td>
+                  <td><span class="badge badge-green">Placed</span></td>
+                  <td style="font-size:12px;color:var(--text-muted)">Niche edit</td>
+                </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== TAB 2: LINK ACTIVITY ========== -->
+      <div class="tab-content" id="bl-links" style="display:none">
+
+        <!-- Link Distribution -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header"><h3>Link Distribution (30/30/40 Rule)</h3></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+              <div style="padding:16px;background:var(--bg);border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border)">
+                <div style="font-size:28px;font-weight:700;color:var(--blue)">30%</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Homepage</div>
+                <div style="font-size:13px;font-weight:600;margin-top:2px">14 links</div>
+                <div style="height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden"><div style="width:30%;height:100%;background:var(--blue);border-radius:2px"></div></div>
+              </div>
+              <div style="padding:16px;background:var(--bg);border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border)">
+                <div style="font-size:28px;font-weight:700;color:var(--accent)">30%</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Money Pages</div>
+                <div style="font-size:13px;font-weight:600;margin-top:2px">14 links</div>
+                <div style="height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden"><div style="width:30%;height:100%;background:var(--accent);border-radius:2px"></div></div>
+              </div>
+              <div style="padding:16px;background:var(--bg);border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border)">
+                <div style="font-size:28px;font-weight:700;color:var(--green)">40%</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Info Articles</div>
+                <div style="font-size:13px;font-weight:600;margin-top:2px">19 links</div>
+                <div style="height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden"><div style="width:40%;height:100%;background:var(--green);border-radius:2px"></div></div>
+              </div>
+            </div>
+
+            <!-- Anchor diversity -->
+            <div style="padding:16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+              <div style="font-size:13px;font-weight:600;margin-bottom:12px">Anchor Text Distribution (auto-enforced)</div>
+              <div style="display:flex;gap:4px;height:24px;border-radius:4px;overflow:hidden;margin-bottom:8px">
+                <div style="width:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:600">Branded 50%</div>
+                <div style="width:30%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:600">LSI 30%</div>
+                <div style="width:15%;background:var(--gray);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:600">Generic 15%</div>
+                <div style="width:5%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-weight:600">5%</div>
+              </div>
+              <div style="font-size:11px;color:var(--text-muted)">Exact match kept under 5%. Distribb auto-generates anchors. You never touch them.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent links table -->
+        <div class="card">
+          <div class="card-header"><h3>Recent Link Placements</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Article Written</th><th>Published On</th><th>Links To</th><th>Type</th><th>Anchor</th><th>Cycle</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:500;font-size:12px">Best AI SEO Tools for Startups in 2026</td>
+                  <td style="color:var(--blue);font-size:12px">saasweekly.com</td>
+                  <td style="font-size:12px">→ you (homepage)</td>
+                  <td><span class="badge badge-blue" style="font-size:10px">Listicle</span></td>
+                  <td style="font-size:12px;color:var(--text-secondary)">Distribb</td>
+                  <td style="font-size:11px;color:var(--text-muted)">A→B→C</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted);font-size:12px">Apr 1</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;font-size:12px">How to Automate SEO with OpenClaw</td>
+                  <td style="color:var(--blue);font-size:12px">openclawlab.xyz</td>
+                  <td style="font-size:12px">→ you (/pricing)</td>
+                  <td><span class="badge badge-purple" style="font-size:10px">Bridge</span></td>
+                  <td style="font-size:12px;color:var(--text-secondary)">distribb.io SEO tool</td>
+                  <td style="font-size:11px;color:var(--text-muted)">A→B→C</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted);font-size:12px">Mar 28</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;font-size:12px">Complete Guide to Backlink Exchange Networks</td>
+                  <td style="color:var(--blue);font-size:12px">startupresources.io</td>
+                  <td style="font-size:12px">→ you (/blog/backlinks)</td>
+                  <td><span class="badge badge-green" style="font-size:10px">Info article</span></td>
+                  <td style="font-size:12px;color:var(--text-secondary)">learn more here</td>
+                  <td style="font-size:11px;color:var(--text-muted)">A→B→D</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted);font-size:12px">Mar 24</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;font-size:12px">SEO Automation: What Actually Works</td>
+                  <td style="color:var(--blue);font-size:12px">growthhackers.com</td>
+                  <td style="font-size:12px">→ you (homepage)</td>
+                  <td><span class="badge badge-gray" style="font-size:10px">Niche edit</span></td>
+                  <td style="font-size:12px;color:var(--text-secondary)">distribb.io</td>
+                  <td style="font-size:11px;color:var(--text-muted)">A→C→B</td>
+                  <td><span class="badge badge-yellow">Indexing</span></td>
+                  <td style="color:var(--text-muted);font-size:12px">Mar 22</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;font-size:12px">Top 15 AI Content Tools Ranked</td>
+                  <td style="color:var(--blue);font-size:12px">foundersblog.co</td>
+                  <td style="font-size:12px">→ you (/features)</td>
+                  <td><span class="badge badge-blue" style="font-size:10px">Listicle</span></td>
+                  <td style="font-size:12px;color:var(--text-secondary)">Distribb platform</td>
+                  <td style="font-size:11px;color:var(--text-muted)">A→B→E</td>
+                  <td><span class="badge badge-green">Live</span></td>
+                  <td style="color:var(--text-muted);font-size:12px">Mar 18</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== TAB 3: LINK STRATEGY ========== -->
+      <div class="tab-content" id="bl-strategy" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+          <!-- How it works -->
+          <div class="card">
+            <div class="card-header"><h3>How the Exchange Works</h3></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <div style="display:flex;gap:12px;align-items:flex-start">
+                  <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">1</div>
+                  <div>
+                    <div style="font-weight:600;font-size:13px">Auto-Analysis</div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">GSC keywords + content crawl detect your niche, DR, competitors, and backlink gap.</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:flex-start">
+                  <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">2</div>
+                  <div>
+                    <div style="font-weight:600;font-size:13px">Cluster Matching</div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">You're placed in a niche cluster (field + type + country + DR range). Links only flow within your cluster.</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:flex-start">
+                  <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">3</div>
+                  <div>
+                    <div style="font-weight:600;font-size:13px">Content Creation</div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">AI writes topical bridge articles + listicles for LLM ranking. Or finds aged pages for niche edits.</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:flex-start">
+                  <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">4</div>
+                  <div>
+                    <div style="font-weight:600;font-size:13px">ABC Placement</div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Links placed in multi-way cycles (A→B→C, never A↔B). 3-month delay before any reverse path.</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:flex-start">
+                  <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">5</div>
+                  <div>
+                    <div style="font-weight:600;font-size:13px">Auto-Publishing</div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Scheduled cadence. Randomized timing, authors, insertion style. Velocity capped per your DR.</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:flex-start">
+                  <div style="width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">∞</div>
+                  <div>
+                    <div style="font-weight:600;font-size:13px">Compound Forever</div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Gap shrinks monthly. Velocity increases. Tier access unlocks. You do nothing.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Your settings -->
+          <div class="card">
+            <div class="card-header"><h3>Your Link Strategy (auto-configured)</h3></div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)">
+                  <div>
+                    <div style="font-size:13px;font-weight:500">Target Split</div>
+                    <div style="font-size:11px;color:var(--text-muted)">Homepage / Money / Info</div>
+                  </div>
+                  <div style="font-weight:600;color:var(--accent)">30 / 30 / 40</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)">
+                  <div>
+                    <div style="font-size:13px;font-weight:500">Monthly Velocity</div>
+                    <div style="font-size:11px;color:var(--text-muted)">Auto-capped for your DR</div>
+                  </div>
+                  <div style="font-weight:600;color:var(--accent)">8 links/mo</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)">
+                  <div>
+                    <div style="font-size:13px;font-weight:500">Reciprocal Delay</div>
+                    <div style="font-size:11px;color:var(--text-muted)">ABC cycle enforcement</div>
+                  </div>
+                  <div style="font-weight:600;color:var(--accent)">3 months</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)">
+                  <div>
+                    <div style="font-size:13px;font-weight:500">Link Types</div>
+                    <div style="font-size:11px;color:var(--text-muted)">Content generation priority</div>
+                  </div>
+                  <div style="font-weight:600;color:var(--accent)">Listicle → Bridge → Niche Edit</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)">
+                  <div>
+                    <div style="font-size:13px;font-weight:500">Footprint Protection</div>
+                    <div style="font-size:11px;color:var(--text-muted)">Timing, authors, style randomized</div>
+                  </div>
+                  <div style="font-weight:600;color:var(--green)">Active ✓</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm)">
+                  <div>
+                    <div style="font-size:13px;font-weight:500">Anchor Diversity</div>
+                    <div style="font-size:11px;color:var(--text-muted)">50% branded, 30% LSI, 15% generic, 5% exact</div>
+                  </div>
+                  <div style="font-weight:600;color:var(--green)">Enforced ✓</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== TAB 4: PROGRESS & REWARDS ========== -->
+      <div class="tab-content" id="bl-progress" style="display:none">
+
+        <!-- Velocity Escalator -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header"><h3>Link Velocity Escalator</h3><span style="font-size:12px;color:var(--text-muted)">The longer you stay, the more links you earn</span></div>
+          <div class="card-body">
+            <div style="display:flex;gap:8px;margin-bottom:20px">
+              <!-- Month 1 - completed -->
+              <div style="flex:1;padding:16px;border-radius:var(--radius-sm);text-align:center;background:var(--green-light);border:2px solid var(--green)">
+                <div style="font-size:10px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:0.5px">Month 1</div>
+                <div style="font-size:24px;font-weight:700;margin:8px 0 4px;color:var(--green)">5/mo</div>
+                <div style="font-size:11px;color:var(--green)">✓ Completed</div>
+              </div>
+              <!-- Month 2 - completed -->
+              <div style="flex:1;padding:16px;border-radius:var(--radius-sm);text-align:center;background:var(--green-light);border:2px solid var(--green)">
+                <div style="font-size:10px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:0.5px">Month 2</div>
+                <div style="font-size:24px;font-weight:700;margin:8px 0 4px;color:var(--green)">5/mo</div>
+                <div style="font-size:11px;color:var(--green)">✓ Completed</div>
+              </div>
+              <!-- Month 3 - current -->
+              <div style="flex:1;padding:16px;border-radius:var(--radius-sm);text-align:center;background:var(--accent-light);border:2px solid var(--accent)">
+                <div style="font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px">Month 3 ★</div>
+                <div style="font-size:24px;font-weight:700;margin:8px 0 4px;color:var(--accent)">8/mo</div>
+                <div style="font-size:11px;color:var(--accent);font-weight:600">Current</div>
+              </div>
+              <!-- Month 6 - locked -->
+              <div style="flex:1;padding:16px;border-radius:var(--radius-sm);text-align:center;background:var(--bg);border:2px solid var(--border)">
+                <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Month 6</div>
+                <div style="font-size:24px;font-weight:700;margin:8px 0 4px;color:var(--text-muted)">12/mo</div>
+                <div style="font-size:11px;color:var(--text-muted)">🔒 3 months away</div>
+              </div>
+              <!-- Month 12 - locked -->
+              <div style="flex:1;padding:16px;border-radius:var(--radius-sm);text-align:center;background:var(--bg);border:2px solid var(--border)">
+                <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Month 12</div>
+                <div style="font-size:24px;font-weight:700;margin:8px 0 4px;color:var(--text-muted)">20/mo</div>
+                <div style="font-size:11px;color:var(--text-muted)">🔒 9 months away</div>
+              </div>
+            </div>
+            <div style="padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:12px;color:var(--text-secondary)">
+              ⚠️ Cancel and come back? Your velocity resets to 5/month. Three months of progress, gone.
+            </div>
+          </div>
+        </div>
+
+        <!-- DR Tier Access -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header"><h3>DR Tier Unlocks</h3><span style="font-size:12px;color:var(--text-muted)">Higher-quality sites unlock as you stay</span></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+              <!-- Tier 1 - unlocked -->
+              <div style="padding:20px;border-radius:var(--radius-sm);text-align:center;background:var(--green-light);border:2px solid var(--green);position:relative">
+                <div style="font-size:28px;margin-bottom:8px">🟢</div>
+                <div style="font-size:18px;font-weight:700;color:var(--green)">DR 10-25</div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">Month 1+</div>
+                <div style="margin-top:8px;font-size:11px;font-weight:600;color:var(--green)">✓ Unlocked</div>
+              </div>
+              <!-- Tier 2 - unlocked -->
+              <div style="padding:20px;border-radius:var(--radius-sm);text-align:center;background:var(--green-light);border:2px solid var(--green);position:relative">
+                <div style="font-size:28px;margin-bottom:8px">🟢</div>
+                <div style="font-size:18px;font-weight:700;color:var(--green)">DR 25-40</div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">Month 2-3</div>
+                <div style="margin-top:8px;font-size:11px;font-weight:600;color:var(--green)">✓ Unlocked</div>
+              </div>
+              <!-- Tier 3 - next -->
+              <div style="padding:20px;border-radius:var(--radius-sm);text-align:center;background:var(--bg);border:2px dashed var(--accent);position:relative">
+                <div style="font-size:28px;margin-bottom:8px">🔶</div>
+                <div style="font-size:18px;font-weight:700;color:var(--accent)">DR 40-60</div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">Month 5+</div>
+                <div style="margin-top:8px;font-size:11px;font-weight:600;color:var(--accent)">🔓 2 months away</div>
+              </div>
+              <!-- Tier 4 - locked -->
+              <div style="padding:20px;border-radius:var(--radius-sm);text-align:center;background:var(--bg);border:2px dashed var(--border);position:relative;opacity:0.6">
+                <div style="font-size:28px;margin-bottom:8px">🔒</div>
+                <div style="font-size:18px;font-weight:700;color:var(--text-muted)">DR 60+</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Month 12+</div>
+                <div style="margin-top:8px;font-size:11px;font-weight:500;color:var(--text-muted)">Premium Tier</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gap Closing Milestones -->
+        <div class="card">
+          <div class="card-header"><h3>Gap Closing Milestones</h3><span style="font-size:12px;color:var(--text-muted)">Target: arvow.com (closest competitor)</span></div>
+          <div class="card-body">
+            <!-- Main progress bar -->
+            <div style="margin-bottom:24px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+                <div style="font-size:20px;font-weight:700;color:var(--accent)">38% gap closed</div>
+                <div style="font-size:13px;color:var(--text-secondary)">89 / 412 referring domains</div>
+              </div>
+              <div style="height:12px;background:var(--border);border-radius:6px;overflow:hidden;position:relative">
+                <div style="width:38%;height:100%;background:linear-gradient(90deg,var(--accent),#FF9A5C);border-radius:6px;transition:width 0.6s ease"></div>
+              </div>
+            </div>
+
+            <!-- Milestone cards -->
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <!-- 25% - achieved -->
+              <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--green-light);border-radius:var(--radius-sm);border:1px solid var(--green)">
+                <div style="width:44px;height:44px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">✅</div>
+                <div style="flex:1">
+                  <div style="font-weight:600;font-size:14px;color:var(--green)">25% Gap Closed</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Badge earned + notification sent to your dashboard</div>
+                </div>
+                <span class="badge badge-green">Achieved Mar 15</span>
+              </div>
+              <!-- 50% - next -->
+              <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--accent-light);border-radius:var(--radius-sm);border:1px dashed var(--accent)">
+                <div style="width:44px;height:44px;border-radius:50%;background:var(--accent-light);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🎯</div>
+                <div style="flex:1">
+                  <div style="font-weight:600;font-size:14px;color:var(--accent)">50% Gap Closed</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Unlock premium niche edit on an aged, high-traffic page</div>
+                </div>
+                <span style="font-size:12px;font-weight:600;color:var(--accent)">~2 months at current pace</span>
+              </div>
+              <!-- 75% - locked -->
+              <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+                <div style="width:44px;height:44px;border-radius:50%;background:var(--bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🎙️</div>
+                <div style="flex:1">
+                  <div style="font-weight:600;font-size:14px">75% Gap Closed</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Featured case study offer. Florian interviews you for the podcast.</div>
+                </div>
+                <span style="font-size:12px;color:var(--text-muted)">~5 months away</span>
+              </div>
+              <!-- 100% -->
+              <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);opacity:0.6">
+                <div style="width:44px;height:44px;border-radius:50%;background:var(--bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">👑</div>
+                <div style="flex:1">
+                  <div style="font-weight:600;font-size:14px">100% Gap Closed</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">You've matched your competitor. Pick a new, bigger target.</div>
+                </div>
+                <span style="font-size:12px;color:var(--text-muted)">~8 months away</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== TAB 5: YOUR CLUSTER ========== -->
+      <div class="tab-content" id="bl-cluster" style="display:none">
+        <div class="card">
+          <div class="card-header"><h3>Your Niche Cluster</h3><span class="badge badge-blue" style="font-size:11px">SaaS / AI Tools / US + Global / DR 20-45</span></div>
+          <div class="card-body">
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Links only flow within your cluster for maximum topical relevance. All sites are auto-vetted: real organic traffic, clean backlink history, no spam.</p>
+
+            <!-- Cluster stats -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+              <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border)">
+                <div style="font-size:22px;font-weight:700">47</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Sites in cluster</div>
+              </div>
+              <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border)">
+                <div style="font-size:22px;font-weight:700">DR 31</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Avg cluster DR</div>
+              </div>
+              <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border)">
+                <div style="font-size:22px;font-weight:700">2.4K</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Avg monthly traffic</div>
+              </div>
+              <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);text-align:center;border:1px solid var(--border)">
+                <div style="font-size:22px;font-weight:700">183</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Links flowing/month</div>
+              </div>
+            </div>
+
+            <!-- Sample cluster members -->
+            <div style="font-size:13px;font-weight:600;margin-bottom:12px">Sample sites in your cluster</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Site</th><th>DR</th><th>Monthly Traffic</th><th>Niche</th><th>Country</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:500;color:var(--blue)">saasweekly.com</td>
+                    <td>42</td>
+                    <td>3,200</td>
+                    <td style="font-size:12px">SaaS News</td>
+                    <td style="font-size:12px">US</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500;color:var(--blue)">startupresources.io</td>
+                    <td>38</td>
+                    <td>2,800</td>
+                    <td style="font-size:12px">Startup Tools</td>
+                    <td style="font-size:12px">US</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500;color:var(--blue)">foundersblog.co</td>
+                    <td>35</td>
+                    <td>1,900</td>
+                    <td style="font-size:12px">Bootstrapping</td>
+                    <td style="font-size:12px">Global</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500;color:var(--blue)">aitoolhunt.com</td>
+                    <td>44</td>
+                    <td>4,100</td>
+                    <td style="font-size:12px">AI Tools</td>
+                    <td style="font-size:12px">US</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:500;color:var(--blue)">growthhackers.com</td>
+                    <td>41</td>
+                    <td>5,600</td>
+                    <td style="font-size:12px">Growth Marketing</td>
+                    <td style="font-size:12px">US</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top:16px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:12px;color:var(--text-secondary)">
+              🔒 Full site list hidden to protect the network. Distribb handles all matching and publishing automatically.
+            </div>
           </div>
         </div>
       </div>
